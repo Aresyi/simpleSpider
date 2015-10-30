@@ -3,6 +3,11 @@
  */
 package com.ydj.simpleSpider;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.PrintStream;
+
 
 /**
  * @author : Ares.yi
@@ -66,6 +71,30 @@ public class MyLog  {
 	public static <T> void logError(T t , boolean isOpen){
 		if(isOpen){
 			System.err.println(t);
+		}
+	}
+	
+	/**
+	 * 输出信息到指定路径文件中
+	 * @param t
+	 * @param filePath
+	 * @throws IOException
+	 *
+	 * @author : Ares.yi
+	 * @createTime : 2015年10月30日 下午4:35:41
+	 */
+	public static <T> void log2File(T t,String filePath) throws IOException{
+		File file = new File(filePath);
+		if(!file.exists()){
+			file.createNewFile();
+		}
+		System.setOut(new PrintStream(new FileOutputStream(file,true)));
+		logInfo(t);
+	}
+	
+	public static void main(String[] args) throws Exception {
+		for(int i=0;;i++){
+			log2File(i,"C:/Users/Administrator/Desktop/ttt.txt");
 		}
 	}
 }
