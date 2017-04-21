@@ -30,6 +30,8 @@ public class ShowJFrame extends javax.swing.JFrame {
 	private SpiderAli spider ;
 	
 	private static int sumSuccessCount = 0 ;
+	
+	private int myHistoryCount = ConfigData.getZhuaquSumCount();
 
 	private boolean resetConfFlag = true;
 	
@@ -64,7 +66,7 @@ public class ShowJFrame extends javax.swing.JFrame {
     	 jLabel_requestShow.setText("抓取请求数："+spider.sum);
          jLabel_successShow.setText("抓取成功数："+spider.success);
          jLabel_failShow.setText("抓取失败数："+spider.fail);
-         jLabel_sumSuccessShow.setText("累计成功有效数："+(sumSuccessCount+spider.success));
+         jLabel_sumSuccessShow.setText("总计："+(sumSuccessCount+spider.success)+"  ["+(myHistoryCount+spider.success)+"]");
 
          if(this.spider.isRun()){
  			this.jButton_stop.setText("暂停,我要修改设置");
@@ -169,7 +171,7 @@ public class ShowJFrame extends javax.swing.JFrame {
         jLabel_requestShow.setText("抓取请求数：0");
         jLabel_successShow.setText("抓取成功数：0");
         jLabel_failShow.setText("抓取失败数：0");
-        jLabel_sumSuccessShow.setText("累计成功有效数："+sumSuccessCount);
+        jLabel_sumSuccessShow.setText("总计："+sumSuccessCount+"  ["+myHistoryCount+"]");
         
         
         

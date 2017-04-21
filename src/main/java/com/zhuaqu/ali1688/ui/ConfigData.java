@@ -1,7 +1,9 @@
 package com.zhuaqu.ali1688.ui;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import net.sf.json.JSONObject;
 
@@ -20,6 +22,9 @@ public class ConfigData {
 
 	private static final Object[] ALERT_SET = new Object[]{5,10,15,20,25,30,50,100,200}; 
 	private static final Object[] FREQUENCY_SET = new Object[]{"500毫秒~1秒","1秒~3秒","1秒~5秒","2秒~6秒","6秒~10秒","20秒~30秒","20秒~60秒"};
+	
+	
+	private static Map<String,JSONObject> TEMP = new HashMap <String,JSONObject>();
 	
 	
 	public static Object[] getAlertSet(){
@@ -56,12 +61,34 @@ public class ConfigData {
 		try {
 			List<JSONObject> list = DaoFactory.getMyDao().getUserInfoList();
 			for(JSONObject one : list){
-				res.add(one.getString("userName"));
+				String userName = one.getString("userName");
+				res.add(userName);
+				
+				TEMP.put(userName, one);
 			}
 		} catch (Exception e) {
 		}
 		
 		return res.toArray();
+	}
+	
+	
+	public static int getZhuaquSumCount(){
+		try {
+			return TEMP.get(Constant.currentUser).getInt("zhuaquCount");
+		} catch (Exception e) {
+		}
+		
+		return 0;
+	}
+	
+	public static JSONObject getUserInfo(String userName){
+		try {
+			return TEMP.get(userName);
+		} catch (Exception e) {
+		}
+		
+		return null;
 	}
 	
 	
@@ -122,6 +149,7 @@ public class ConfigData {
     	try {
 			DaoFactory.getMyDao().updateUserConfig(Constant.userAgent, Constant.cookie);
 		} catch (Exception e) {
+			e.printStackTrace();
 		}
 	}
 	

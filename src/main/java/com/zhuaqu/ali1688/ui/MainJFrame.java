@@ -5,10 +5,14 @@
 package com.zhuaqu.ali1688.ui;
 
 import java.awt.Toolkit;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 import java.io.File;
 
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
+
+import net.sf.json.JSONObject;
 
 import com.ydj.common.Constant;
 import com.ydj.simpleSpider.MyLog;
@@ -99,6 +103,29 @@ public class MainJFrame extends javax.swing.JFrame {
 
         jTextField_savePath.setEditable(false);//设置不可以输入
         
+        
+        jTextField_spider.addItemListener(new ItemListener(){
+
+			@Override
+			public void itemStateChanged(ItemEvent e) {
+				if(e.getStateChange() == ItemEvent.SELECTED){
+					MyLog.logInfo(jTextField_spider.getSelectedItem());
+					
+					if(jTextField_spider.getSelectedItem() != null){
+						String userName = jTextField_spider.getSelectedItem().toString();
+						
+						if(Toolbox.isNotEmpty(userName)){
+							JSONObject userConfInfo = ConfigData.getUserInfo(userName);
+							jTextField_userAgent.setText(userConfInfo.getString("userAgent"));
+							jTextField_cookie.setText(userConfInfo.getString("cookie"));
+						}
+					}
+					
+				}
+				
+			}});
+        
+        
         jButton_browse.setText("浏览");
         jButton_browse.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -125,8 +152,6 @@ public class MainJFrame extends javax.swing.JFrame {
         
         Object items3[] = ConfigData.getSpiders();
         jTextField_spider.setModel(new javax.swing.DefaultComboBoxModel(items3));
-        
-        
         
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());

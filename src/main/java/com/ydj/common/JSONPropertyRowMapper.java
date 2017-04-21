@@ -24,8 +24,11 @@ public class JSONPropertyRowMapper implements RowMapper<JSONObject> {
 		for (int index = 1; index <= columnCount; index++) {
 			String column = JdbcUtils.lookupColumnName(rsmd, index);
 			Object value = rs.getObject(column);
-			if (null != value && !"".equals(value.toString()))
+			if (null != value && !"".equals(value.toString())){
 				json.put(column, "null".equalsIgnoreCase(value.toString()) ? "": value);
+			}else{
+				json.put(column, "");
+			}
 		}
 
 		return json;

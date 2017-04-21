@@ -133,8 +133,8 @@ public class OneStep {
 			}
 		}
 		
-		int typeOf = 7;
-		String url = "https://s.1688.com/company/company_search.htm?pageSize=30&keywords=%D0%DD%CF%D0%BF%E3&offset=3&beginPage=";
+		int typeOf = 8;
+		String url = "https://s.1688.com/company/company_search.htm?keywords=%B3%C4%C9%C0&pageSize=30&offset=3&beginPage=";
 		
 		for(int page : set){
 			getStoreInfo(typeOf,url+page,page);
