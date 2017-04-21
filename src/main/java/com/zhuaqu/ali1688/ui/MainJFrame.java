@@ -10,12 +10,14 @@ import java.io.File;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 
+import com.ydj.common.Constant;
 import com.ydj.simpleSpider.MyLog;
+import com.zhuaqu.InitApp;
 
 
 /**
  * 
- * @author : Apple
+ * @author : Ares
  * @createTime : Aug 17, 2012 1:49:22 PM
  * @version : 1.0
  * @description :
@@ -35,6 +37,7 @@ public class MainJFrame extends javax.swing.JFrame {
      * Creates new form NewJFrame
      */
     public MainJFrame() {
+    	new InitApp();
         initComponents();
     }
 
@@ -57,6 +60,9 @@ public class MainJFrame extends javax.swing.JFrame {
         jLabel_password = new javax.swing.JLabel();
         jTextField_password = new javax.swing.JPasswordField();
         
+        jLabel_spider = new javax.swing.JLabel();
+        jTextField_spider = new javax.swing.JComboBox();
+        
         
         jLabel_savePath = new javax.swing.JLabel();
         jTextField_savePath = new javax.swing.JTextField();
@@ -77,13 +83,14 @@ public class MainJFrame extends javax.swing.JFrame {
         jTextField_frequencySet = new javax.swing.JComboBox();
         
         
-        jButton_connect = new javax.swing.JButton();
+        jButton_start = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        jLabel_host.setText("代理IP");
+        jLabel_host.setText("代   理   IP");
         jLabel_userName.setText("端         口");
         jLabel_password.setText("密         码");
+        jLabel_spider.setText("抓   取   人");
         jLabel_userAgent.setText("设置UserAgent");
         jLabel_cookie.setText("设置Cookie");
         jLabel_alertSet.setText("失败N次时提醒");
@@ -95,25 +102,31 @@ public class MainJFrame extends javax.swing.JFrame {
         jButton_browse.setText("浏览");
         jButton_browse.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-            	jButton_Browse_ActionPerformed(evt);
+            	jButtonBrowseActionPerformed(evt);
             }
         });
         
 
-        jButton_connect.setText("开始抓取");
-        jButton_connect.addActionListener(new java.awt.event.ActionListener() {
+        jButton_start.setText("开始抓取");
+        jButton_start.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 connectJButtonActionPerformed(evt);
             }
         });
         
         
-        Object items[] = new Object[]{5,10,15,20,25,30,50,100,200}; 
+        Object items[] = ConfigData.getAlertSet();
         jTextField_alertSet.setModel(new javax.swing.DefaultComboBoxModel(items));
         
         
-        Object items2[] = new Object[]{"500毫秒~1秒","1秒~3秒","1秒~5秒","2秒~6秒","6秒~10秒","20秒~30秒"}; 
+        Object items2[] = ConfigData.getFrequencySet();
         jTextField_frequencySet.setModel(new javax.swing.DefaultComboBoxModel(items2));
+        
+        
+        Object items3[] = ConfigData.getSpiders();
+        jTextField_spider.setModel(new javax.swing.DefaultComboBoxModel(items3));
+        
+        
         
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -128,6 +141,7 @@ public class MainJFrame extends javax.swing.JFrame {
                             .addComponent(jLabel_host)
                             .addComponent(jLabel_userName)
                             .addComponent(jLabel_password)
+                            .addComponent(jLabel_spider)
                             .addComponent(jLabel_cookie)
                             .addComponent(jLabel_userAgent)
                             .addComponent(jLabel_alertSet)
@@ -140,6 +154,7 @@ public class MainJFrame extends javax.swing.JFrame {
                             .addComponent(jTextField_host)
                             .addComponent(jTextField_userName)
                             .addComponent(jTextField_password)
+                            .addComponent(jTextField_spider)
                             .addComponent(jTextField_cookie)
                             .addComponent(jTextField_alertSet)
                             .addComponent(jTextField_frequencySet)
@@ -156,7 +171,7 @@ public class MainJFrame extends javax.swing.JFrame {
                     		)
                     .addGroup(layout.createSequentialGroup()
                         .addGap(154, 154, 154)
-                        .addComponent(jButton_connect)
+                        .addComponent(jButton_start)
                         
                     		))
                 .addContainerGap(58, Short.MAX_VALUE))
@@ -179,6 +194,11 @@ public class MainJFrame extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel_password)
                     .addComponent(jTextField_password, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    
+                .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel_spider)
+                    .addComponent(jTextField_spider, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))    
                 
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -209,7 +229,7 @@ public class MainJFrame extends javax.swing.JFrame {
                     
                             
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 28, Short.MAX_VALUE)
-                .addComponent(jButton_connect)
+                .addComponent(jButton_start)
                 .addGap(24, 24, 24)
                 
             	)
@@ -222,11 +242,11 @@ public class MainJFrame extends javax.swing.JFrame {
         this.setResizable(false);//设置不可以最大化
         this.setLocationRelativeTo(null);
         
-        this.setSize(500, 500);
+        this.setSize(500, 550);
     }
     
     
-    private void jButton_Browse_ActionPerformed(java.awt.event.ActionEvent evt) {
+    private void jButtonBrowseActionPerformed(java.awt.event.ActionEvent evt) {
     	jfc.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);//设置只可以选择文件夹
         int state = jfc.showOpenDialog(null);
         if (state == 1) {  
@@ -257,44 +277,39 @@ public class MainJFrame extends javax.swing.JFrame {
 
     private void connectJButtonActionPerformed(java.awt.event.ActionEvent evt) {
     	
-//    	Object host = this.jTextField_host.getSelectedItem();
-//    	String userName = this.jTextField_userName.getText();
-//    	String password = this.jTextField_password.getText();
-    	
-    	String cookie = this.jTextField_cookie.getText();
+    	Object spiderName = jTextField_spider.getSelectedItem();
     	String userAgent = this.jTextField_userAgent.getText();
+    	String cookie = this.jTextField_cookie.getText();
     	Object alertSet = jTextField_alertSet.getSelectedItem();
     	Object frequencySet = jTextField_frequencySet.getSelectedItem();
     	String savePath = jTextField_savePath.getText()+"/";  
     	
+    	MyLog.logInfo("spider: "+spiderName.toString());
     	MyLog.logInfo("userAgent: "+userAgent);
     	MyLog.logInfo("cookie: "+cookie);
     	MyLog.logInfo("alertSet: "+alertSet.toString());
     	MyLog.logInfo("frequencySet: "+frequencySet.toString());
     	MyLog.logInfo("savePath: "+savePath);
     	
+    	if(spiderName == null || Toolbox.isEmptyString(spiderName.toString())){
+    		JOptionPane.showMessageDialog(null, "请正确选择抓取人","提示",JOptionPane.ERROR_MESSAGE); 
+    		return ;
+    	}
 
-    	if(cookie == null || "".equals(cookie)){
+    	if(Toolbox.isEmptyString(cookie)){
     		JOptionPane.showMessageDialog(null, "请设置Cookie和UserAgent","提示",JOptionPane.ERROR_MESSAGE); 
     		return ;
     	}
     	
-    	Common2.cookie = cookie;
-    	
-    	if(Common2.isNotEmpty(userAgent)){
-    		Common2.userAgent = userAgent;
-    	}
-    	
-    	SecondStep2.alertCount = Integer.parseInt(alertSet.toString());
-    	SecondStep2.savePath = savePath;
-    	
-    	this.frequencySet(frequencySet.toString());
+    	Constant.currentUser = spiderName.toString();
+    	ConfigData.setConfig(userAgent, cookie, alertSet, frequencySet);
+    	Constant.savePath = savePath;
 
     	//TODO: 保存用户输入，缓存
     	
     	this.setVisible(false);
     	
-    	final SecondStep2 spider = new SecondStep2();
+    	final SpiderAli spider = new SpiderAli();
 
     	ShowJFrame showJFrame = new ShowJFrame(spider);
     	showJFrame.setVisible(true);
@@ -317,42 +332,6 @@ public class MainJFrame extends javax.swing.JFrame {
     	
     	
     }
-    
-    
-    private void frequencySet(String choose){
-    	// "500毫秒~1秒","1秒~3秒","1秒~5秒","2秒~6秒","6秒~10秒","20秒~30秒"
-    	
-    	if("500毫秒~1秒".equals(choose)){
-    		SecondStep2.frequencyMin = 500;
-    		SecondStep2.frequencyMax = 1000;
-    	}
-    	
-    	if("1秒~3秒".equals(choose)){
-    		SecondStep2.frequencyMin = 1000;
-    		SecondStep2.frequencyMax = 3000;
-    	}
-    	
-    	if("1秒~5秒".equals(choose)){
-    		SecondStep2.frequencyMin = 1000;
-    		SecondStep2.frequencyMax = 5000;
-    	}
-    	
-    	if("2秒~6秒".equals(choose)){
-    		SecondStep2.frequencyMin = 2000;
-    		SecondStep2.frequencyMax = 6000;
-    	}
-    	
-    	if("6秒~10秒".equals(choose)){
-    		SecondStep2.frequencyMin = 6000;
-    		SecondStep2.frequencyMax = 10*1000;
-    	}
-    	
-    	if("20秒~30秒".equals(choose)){
-    		SecondStep2.frequencyMin = 20*1000;
-    		SecondStep2.frequencyMax = 30*1000;
-    	}
-    }
-    
     
 
     /**
@@ -385,10 +364,11 @@ public class MainJFrame extends javax.swing.JFrame {
         });
     }
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton_connect;
+    private javax.swing.JButton jButton_start;
     private javax.swing.JLabel jLabel_host;
     private javax.swing.JLabel jLabel_userName;
     private javax.swing.JLabel jLabel_password;
+    private javax.swing.JLabel jLabel_spider;
     private javax.swing.JLabel jLabel_userAgent;
     private javax.swing.JLabel jLabel_cookie;
     private javax.swing.JLabel jLabel_alertSet;
@@ -399,6 +379,8 @@ public class MainJFrame extends javax.swing.JFrame {
 	private javax.swing.JComboBox jTextField_host;
     private javax.swing.JTextField jTextField_userName;
     private javax.swing.JTextField jTextField_password;
+    @SuppressWarnings("rawtypes")
+    private javax.swing.JComboBox jTextField_spider;
     private javax.swing.JTextField jTextField_userAgent;
     private javax.swing.JTextField jTextField_cookie;
     @SuppressWarnings("rawtypes")

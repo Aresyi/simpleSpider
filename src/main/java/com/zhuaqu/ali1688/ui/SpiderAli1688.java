@@ -1,17 +1,14 @@
 package com.zhuaqu.ali1688.ui;
 
-import java.util.HashSet;
-import java.util.Set;
-
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
+import com.ydj.common.Constant;
 import com.ydj.common.dao.DaoFactory;
 import com.ydj.simpleSpider.MyLog;
 import com.zhuaqu.Common;
-import com.zhuaqu.InitApp;
 
 /**  
  *
@@ -21,30 +18,40 @@ import com.zhuaqu.InitApp;
  * @description : 
  *
  */
-public class OneStep2 {
+public class SpiderAli1688 {
 	
-	static String getContactInfo(Ali1688Data data,String url){
+	/**
+	 * 抓取店铺详情联系人页面信息
+	 * 
+	 * @param data
+	 * @param url
+	 * @return
+	 *
+	 * @author : Ares.yi
+	 * @createTime : 2017年4月21日 下午2:59:12
+	 */
+	public static String getContactInfo(Ali1688Data data,String url){
 		
 		String ren = "" ,tel ="";
 		
 		try {
-			String html = Common2.getHtmlContent(url);
+			String html = Toolbox.getHtmlContent(url);
 			
 			Document doc = Jsoup.parse(html);
 			
 			
 			if(doc.select("div[class=return-cbu-signin]").size() > 0){
-				SecondStep2.state = State.needSignIn;
+				Constant.state = State.needSignIn;
 				//MyLog.logError(html);
-				Common2.save2File(SecondStep2.savePath, url.replace("://", ".")+".html", html,"GBK");
+				Toolbox.save2File(Constant.savePath, url.replace("://", ".")+".html", html,"GBK");
 				
 				return "";
 			}		
 					
 			if(doc.select("label[for=checkcodeInput]").size() > 0){
-				SecondStep2.state = State.needCheckcode;
+				Constant.state = State.needCheckcode;
 				//MyLog.logError(html);
-				Common2.save2File(SecondStep2.savePath, url.replace("//", ".")+".html", html,"GBK");
+				Toolbox.save2File(Constant.savePath, url.replace("//", ".")+".html", html,"GBK");
 				return "";
 			}
 			
@@ -58,7 +65,7 @@ public class OneStep2 {
 				
 				String href = doc.select("li[data-page-name=contactinfo]").select("a").attr("href");
 				
-				html = Common2.getHtmlContent(href);
+				html = Toolbox.getHtmlContent(href);
 				
 				Document doc2 = Jsoup.parse(html);
 				
@@ -69,6 +76,7 @@ public class OneStep2 {
 				}
 			}
 			
+			ren = Toolbox.cleanContactInfo(ren);
 			tel = tel.replace("登录后可见", "");
 		} catch (Exception e) {
 		}
@@ -80,10 +88,19 @@ public class OneStep2 {
 	}
 	
 
-	
-	private static void getStoreInfo(int typeOf,String url,int page){
+	/**
+	 * 抓取品类列表页中每家店铺信息
+	 * 
+	 * @param typeOf
+	 * @param url
+	 * @param page
+	 *
+	 * @author : Ares.yi
+	 * @createTime : 2017年4月21日 下午3:00:15
+	 */
+	public static void getStoreInfo(int typeOf,String url,int page){
 		
-		String html = Common2.getHtmlContent(url);
+		String html = Toolbox.getHtmlContent(url);
 		
 		//System.out.println(html);
 
@@ -132,25 +149,6 @@ public class OneStep2 {
 	
 	
 	public static void main(String[] args) throws Exception {
-		
-		new InitApp();
-		
-		Set<Integer> set = new HashSet<Integer>();
-		
-		while(set.size() < 100 ){
-			int i = Common.getRandomNumber(1, 100);
-			
-			if(!set.contains(i)){
-				set.add(i);
-			}
-		}
-		
-		int typeOf = 5;
-		String url = "https://s.1688.com/company/company_search.htm?keywords=%C5%AE%BF%E3&pageSize=30&smToken=6a5002852252417fba73b7d54a2e4d76&smSign=FIh9LqMsw0SLr5bJZKbn%2BA%3D%3D&offset=3&beginPage=";
-		
-		for(int page : set){
-			getStoreInfo(typeOf,url+page,page);
-		}
 		
 	}
 }

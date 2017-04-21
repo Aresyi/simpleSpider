@@ -13,6 +13,10 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
+
+import com.ydj.common.Constant;
 
 /**  
  *
@@ -22,9 +26,7 @@ import java.util.Date;
  * @description : 
  *
  */
-public class Common2 {
-	
-	public final static String TAB = "\t"; 
+public class Toolbox {
 	
 	public static int getRandomNumber(int min, int max) {
 
@@ -39,11 +41,6 @@ public class Common2 {
 
 	}
 	
-	
-	public static String cookie = "";
-	public static String userAgent = "Mozilla/5.0 (Windows NT 10.0; WOW64; rv:52.0) Gecko/20100101 Firefox/52.0";
-	
-	
 	public static String getHtmlContent(String url, int connectTimeout,
 			int readTimeout, String charset) {
 		
@@ -51,7 +48,7 @@ public class Common2 {
 			return "";
 		}
 		
-		if("".equals(cookie)){
+		if("".equals(Constant.cookie)){
 			System.err.println("请先设置Cookie");
 			return "";
 		}
@@ -67,9 +64,9 @@ public class Common2 {
 			urlConnection.setReadTimeout(readTimeout);
 			
 			urlConnection.setRequestProperty("Connection","keep-alive");
-			urlConnection.setRequestProperty("User-Agent",userAgent);
+			urlConnection.setRequestProperty("User-Agent",Constant.userAgent);
 			urlConnection.setRequestProperty("Accept","text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8");
-			urlConnection.setRequestProperty("Cookie",cookie);
+			urlConnection.setRequestProperty("Cookie",Constant.cookie);
 			
 			BufferedReader in = new BufferedReader(new InputStreamReader(urlConnection.getInputStream(), charset));
 
@@ -176,5 +173,23 @@ public class Common2 {
 		SimpleDateFormat dateFormat = new SimpleDateFormat(format);
 		return dateFormat.format(date);
 
+	}
+	
+	public static String cleanContactInfo(String contactInfo){
+		if(isEmptyString(contactInfo)){
+			return "";
+		}
+		
+		if(contactInfo.contains(" ")){
+			
+			Set<String> set = new HashSet<String>();
+			for(String one : contactInfo.split(" ")){
+				set.add(one);
+			}
+			
+			return set.toString().replace(",", " ").replace("[", "").replace("]", "") ;
+		}
+		
+		return contactInfo;
 	}
 }

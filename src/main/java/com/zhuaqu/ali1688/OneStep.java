@@ -11,6 +11,7 @@ import org.jsoup.select.Elements;
 import com.ydj.common.dao.DaoFactory;
 import com.zhuaqu.Common;
 import com.zhuaqu.InitApp;
+import com.zhuaqu.ali1688.ui.Toolbox;
 
 /**  
  *
@@ -53,9 +54,9 @@ public class OneStep {
 				}
 			}
 			
+			ren = Toolbox.cleanContactInfo(ren);
 			tel = tel.replace("登录后可见", "");
 		} catch (Exception e) {
-			// TODO: handle exception
 		}
 		
 		System.out.println("\t"+ren+"\t"+tel);
@@ -132,8 +133,8 @@ public class OneStep {
 			}
 		}
 		
-		int typeOf = 5;
-		String url = "https://s.1688.com/company/company_search.htm?keywords=%C5%AE%BF%E3&pageSize=30&smToken=6a5002852252417fba73b7d54a2e4d76&smSign=FIh9LqMsw0SLr5bJZKbn%2BA%3D%3D&offset=3&beginPage=";
+		int typeOf = 7;
+		String url = "https://s.1688.com/company/company_search.htm?pageSize=30&keywords=%D0%DD%CF%D0%BF%E3&offset=3&beginPage=";
 		
 		for(int page : set){
 			getStoreInfo(typeOf,url+page,page);

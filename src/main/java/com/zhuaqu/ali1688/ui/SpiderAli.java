@@ -4,10 +4,10 @@ import java.util.List;
 
 import net.sf.json.JSONObject;
 
+import com.ydj.common.Constant;
 import com.ydj.common.dao.DaoFactory;
 import com.ydj.simpleSpider.MyLog;
 import com.zhuaqu.Common;
-import com.zhuaqu.InitApp;
 
 /**  
  *
@@ -17,38 +17,22 @@ import com.zhuaqu.InitApp;
  * @description : 
  *
  */
-public class SecondStep2 {
+public class SpiderAli {
 	
 	
-	public static  String savePath = "C:\\";
-	
-	public static  int alertCount = 5;
-	
-	
-	public static  int frequencyMin = 500;
-	
-	public static  int frequencyMax = 1200;
-	
-	
-	public static State state = State.def;
-	
-	
-	
-	
-	boolean isRun = true;
+	private boolean isRun = true;
 	
 	int sum = 0;
 	int success = 0;
 	int fail = 0;
 	
 	
-	
-	
-	public SecondStep2() {
-		new InitApp();
+	public SpiderAli() {
 	}
 	
 	public void start() throws Exception{
+		
+		this.isRun = true;
 		
 		Ali1688Data ali1688Data = null ;
 		
@@ -65,7 +49,7 @@ public class SecondStep2 {
 					break;
 				}
 		
-				String fileName = Common2.getDateString("yyyyMMddHH", System.currentTimeMillis())+".log";
+				String fileName = Toolbox.getDateString("yyyyMMddHH", System.currentTimeMillis())+".log";
 				
 				sum++;
 				
@@ -76,12 +60,12 @@ public class SecondStep2 {
 				
 				
 				
-				OneStep2.getContactInfo(ali1688Data, storeURL);
+				SpiderAli1688.getContactInfo(ali1688Data, storeURL);
 				
 				
-				String txt = id+Common2.TAB+storeURL+Common2.TAB+ali1688Data.contact+Common2.TAB+ali1688Data.tel ;
+				String txt = id+Constant.TAB+storeURL+Constant.TAB+ali1688Data.contact+Constant.TAB+ali1688Data.tel ;
 				
-				if( Common2.isEmptyString(ali1688Data.tel) ){
+				if( Toolbox.isEmptyString(ali1688Data.tel) ){
 					i++;
 					fail++;
 					
@@ -94,7 +78,7 @@ public class SecondStep2 {
 						i = 0;
 					}
 					
-					Common2.save2File(savePath, fileName, txt,"UTF-8");
+					Toolbox.save2File(Constant.savePath, fileName, txt,"UTF-8");
 				}
 				
 				alert = i;
@@ -113,7 +97,7 @@ public class SecondStep2 {
 				DaoFactory.getMyDao().update(id, ali1688Data.contact, ali1688Data.tel);
 				
 				try {
-					Thread.sleep(Common.getRandomNumber(frequencyMin, frequencyMax));
+					Thread.sleep(Common.getRandomNumber(Constant.frequencyMin, Constant.frequencyMax));
 				} catch (Exception e) {
 				}
 			}
@@ -127,18 +111,18 @@ public class SecondStep2 {
 	
 	private boolean isContinue(int alert){
 		
-		if(SecondStep2.state == State.needSignIn){
+		if(Constant.state == State.needSignIn){
 			MyLog.logError("抓取已经暂停，需要在‘浏览器’【重新登录】");
 			return false;
 		}
 		
-		if(SecondStep2.state == State.needCheckcode){
+		if(Constant.state == State.needCheckcode){
 			MyLog.logError("抓取已经暂停，需要在‘浏览器’【输入验证码】");
 			return false;
 		}
 		
-		if( alert > alertCount){
-			SecondStep2.state = State.gtFailCount;
+		if( alert > Constant.alertCount){
+			Constant.state = State.gtFailCount;
 			MyLog.logError("连续"+alert+"次未抓到联系方式，抓取已暂停，请检查是否需要【手动输入验证码】或【重新设置Cookie】或【重新登录】");
 			
 			return false;
@@ -147,6 +131,9 @@ public class SecondStep2 {
 		return true;
 	}
 	
+	public boolean isRun() {
+		return isRun;
+	}
 
 	/**
 	 * @param args

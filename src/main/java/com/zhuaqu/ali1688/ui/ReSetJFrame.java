@@ -6,15 +6,13 @@ package com.zhuaqu.ali1688.ui;
 
 import java.awt.Toolkit;
 
-import javax.swing.JOptionPane;
-
 import com.browe.Test;
 import com.ydj.simpleSpider.MyLog;
 
 
 /**
  * 
- * @author : Apple
+ * @author : Ares.yi
  * @createTime : Aug 17, 2012 1:49:22 PM
  * @version : 1.0
  * @description :
@@ -175,73 +173,13 @@ public class ReSetJFrame extends javax.swing.JFrame {
 		Test test = new Test(url);
 		test.brower(url, url);
 
-//    	if(cookie == null || "".equals(cookie)){
-//    		JOptionPane.showMessageDialog(null, "请设置Cookie和UserAgent","提示",JOptionPane.ERROR_MESSAGE); 
-//    		return ;
-//    	}
-    	
-    	Common2.cookie = cookie;
-    	Common2.userAgent = userAgent;
-    	
-    	SecondStep2.alertCount = Integer.parseInt(alertSet.toString());
-    	
-    	this.frequencySet(frequencySet.toString());
 
-    	//TODO: 保存用户输入，缓存
-    	
-    	this.setVisible(false);
-    	
-    	final SecondStep2 spider = new SecondStep2();
-
-    	ShowJFrame showJFrame = new ShowJFrame(spider);
-    	showJFrame.setVisible(true);
-    	
-    	new Thread(
-    			new Runnable() {
-					
-					@Override
-					public void run() {
-						try {
-							spider.start();
-						} catch (Exception e) {
-							e.printStackTrace();
-						}
-					}
-				}
-    	).start();
-    	
     	
     	
     	
     }
     
     
-    private void frequencySet(String choose){
-    	// "500毫秒~1秒","1秒~3秒","1秒~5秒","2秒~6秒"
-    	
-    	if("500毫秒~1秒".equals(choose)){
-    		SecondStep2.frequencyMin = 500;
-    		SecondStep2.frequencyMax = 1000;
-    	}
-    	
-    	if("1秒~3秒".equals(choose)){
-    		SecondStep2.frequencyMin = 1000;
-    		SecondStep2.frequencyMax = 3000;
-    	}
-    	
-    	if("1秒~5秒".equals(choose)){
-    		SecondStep2.frequencyMin = 1000;
-    		SecondStep2.frequencyMax = 5000;
-    	}
-    	
-    	if("2秒~6秒".equals(choose)){
-    		SecondStep2.frequencyMin = 2000;
-    		SecondStep2.frequencyMax = 6000;
-    	}
-    }
-    
-    
-
     /**
      * @param args the command line arguments
      */
@@ -277,7 +215,6 @@ public class ReSetJFrame extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel_alertSet;
     private javax.swing.JLabel jLabel_frequencySet;
 
-    @SuppressWarnings("rawtypes")
     private javax.swing.JTextField jTextField_userAgent;
     private javax.swing.JTextField jTextField_cookie;
     @SuppressWarnings("rawtypes")

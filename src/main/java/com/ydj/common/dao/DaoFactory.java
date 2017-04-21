@@ -28,7 +28,6 @@ public class DaoFactory {
 	}
 	
 	private static <T> T getBean(String name,Class<T> clazz){
-		System.out.println("SystemContext.context="+SystemContext.context);
 		return SystemContext.context.getBean(name,clazz);
 	}
 }

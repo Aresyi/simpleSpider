@@ -10,14 +10,14 @@ import java.util.TimerTask;
 
 import javax.swing.JOptionPane;
 
-import com.browe.Test;
+import com.ydj.common.Constant;
 import com.ydj.common.dao.DaoFactory;
 import com.ydj.simpleSpider.MyLog;
 
 
 /**
  * 
- * @author : Apple
+ * @author : Ares
  * @createTime : Aug 17, 2012 1:49:09 PM
  * @version : 1.0
  * @description :
@@ -27,14 +27,14 @@ public class ShowJFrame extends javax.swing.JFrame {
 	
 	private static final long serialVersionUID = 1L;
 
-	SecondStep2 spider ;
+	private SpiderAli spider ;
 	
-	static int sumSuccessCount = 0 ;
+	private static int sumSuccessCount = 0 ;
 
 	private boolean resetConfFlag = true;
 	
 	
-    public ShowJFrame(SecondStep2 obj) {
+    public ShowJFrame(SpiderAli obj) {
     	this();
     	this.spider = obj;
     }
@@ -66,7 +66,7 @@ public class ShowJFrame extends javax.swing.JFrame {
          jLabel_failShow.setText("抓取失败数："+spider.fail);
          jLabel_sumSuccessShow.setText("累计成功有效数："+(sumSuccessCount+spider.success));
 
-         if(this.spider.isRun){
+         if(this.spider.isRun()){
  			this.jButton_stop.setText("暂停,我要修改设置");
  		}else{
  			this.jButton_stop.setText("重新抓取");
@@ -76,7 +76,7 @@ public class ShowJFrame extends javax.swing.JFrame {
          Object[] options = { "我已修复，继续抓！", "去一边！" };  
          String alertMsg = "";
          
-        switch (SecondStep2.state) {
+        switch (Constant.state) {
 			case needSignIn:
 				alertMsg = "抓取已经暂停，需要在‘浏览器’【重新登录】或【重新设置Cookie和UserAgent】";
 				options[0] = "我已重新登录，继续抓！";
@@ -86,16 +86,16 @@ public class ShowJFrame extends javax.swing.JFrame {
 				options[0] = "我已输入验证码，继续抓！";
 				break;
 			case gtFailCount:
-				alertMsg = "连续"+SecondStep2.alertCount+"次未抓到联系方式，抓取已暂停，请检查是否需要【手动输入验证码】或【重新设置Cookie】或【重新登录】";
+				alertMsg = "连续"+Constant.alertCount+"次未抓到联系方式，抓取已暂停，请检查是否需要【手动输入验证码】或【重新设置Cookie】或【重新登录】";
 				break; 
 			default:
 			break;
 		}
          
-         if(Common2.isNotEmpty(alertMsg)){
+         if(Toolbox.isNotEmpty(alertMsg)){
         	
         	int m = -1 ; 
-        	if(SecondStep2.state == State.needSignIn){ //
+        	if(Constant.state == State.needSignIn){ //
         		//ReSetJFrame reSetFrame = new ReSetJFrame();
         		//reSetFrame.setVisible(true);
         		
@@ -176,10 +176,10 @@ public class ShowJFrame extends javax.swing.JFrame {
         
         /**---------------------------------------------------------------------------*/
         jLabel_cookie = new javax.swing.JLabel();
-		jTextField_cookie = new javax.swing.JTextField(Common2.cookie);
+		jTextField_cookie = new javax.swing.JTextField(Constant.cookie);
 		
         jLabel_userAgent = new javax.swing.JLabel();
-        jTextField_userAgent = new javax.swing.JTextField(Common2.userAgent);
+        jTextField_userAgent = new javax.swing.JTextField(Constant.userAgent);
         
         
         jLabel_alertSet = new javax.swing.JLabel();
@@ -194,11 +194,11 @@ public class ShowJFrame extends javax.swing.JFrame {
         jLabel_alertSet.setText("失败N次时提醒");
         jLabel_frequencySet.setText("设置抓取的频率");
 
-        Object items[] = new Object[]{SecondStep2.alertCount,5,10,15,20,25,30,50,100,200}; 
+        Object items[] = ConfigData.getAlertSet(Constant.alertCount);
         jTextField_alertSet.setModel(new javax.swing.DefaultComboBoxModel(items));
         
         
-        Object items2[] = new Object[]{"500毫秒~1秒","1秒~3秒","1秒~5秒","2秒~6秒","6秒~10秒","20秒~30秒"}; 
+        Object items2[] = ConfigData.getFrequencySet();
         jTextField_frequencySet.setModel(new javax.swing.DefaultComboBoxModel(items2));
         
         /**---------------------------------------------------------------------------*/
@@ -326,7 +326,7 @@ public class ShowJFrame extends javax.swing.JFrame {
     
     private void jButton_Create_ActionPerformed(java.awt.event.ActionEvent evt) {
     	
-    	if(this.spider.isRun){
+    	if(this.spider.isRun()){
     		this.stop();
     	}else{
 	    	String userAgent = this.jTextField_userAgent.getText();
@@ -339,18 +339,7 @@ public class ShowJFrame extends javax.swing.JFrame {
 	    	MyLog.logInfo("alertSet: "+alertSet.toString());
 	    	MyLog.logInfo("frequencySet: "+frequencySet.toString());
 	    	
-	
-	    	if(Common2.isNotEmpty(cookie)){
-	    		Common2.cookie = cookie;
-	    	}
-	    	
-	    	if(Common2.isNotEmpty(userAgent)){
-	    		Common2.userAgent = userAgent;
-	    	}
-	    	
-	    	SecondStep2.alertCount = Integer.parseInt(alertSet.toString());
-	    	
-	    	this.frequencySet(frequencySet.toString());
+	    	ConfigData.setConfig(userAgent, cookie, alertSet, frequencySet);
 	    	
 	    	resetConfFlag = true;
 	    	
@@ -360,54 +349,17 @@ public class ShowJFrame extends javax.swing.JFrame {
     }
     
     
-    private void frequencySet(String choose){
-    	// "500毫秒~1秒","1秒~3秒","1秒~5秒","2秒~6秒","6秒~10秒","20秒~30秒"
-    	
-    	if("500毫秒~1秒".equals(choose)){
-    		SecondStep2.frequencyMin = 500;
-    		SecondStep2.frequencyMax = 1000;
-    	}
-    	
-    	if("1秒~3秒".equals(choose)){
-    		SecondStep2.frequencyMin = 1000;
-    		SecondStep2.frequencyMax = 3000;
-    	}
-    	
-    	if("1秒~5秒".equals(choose)){
-    		SecondStep2.frequencyMin = 1000;
-    		SecondStep2.frequencyMax = 5000;
-    	}
-    	
-    	if("2秒~6秒".equals(choose)){
-    		SecondStep2.frequencyMin = 2000;
-    		SecondStep2.frequencyMax = 6000;
-    	}
-    	
-    	if("6秒~10秒".equals(choose)){
-    		SecondStep2.frequencyMin = 6000;
-    		SecondStep2.frequencyMax = 10*1000;
-    	}
-    	
-    	if("20秒~30秒".equals(choose)){
-    		SecondStep2.frequencyMin = 20*1000;
-    		SecondStep2.frequencyMax = 30*1000;
-    	}
-    }
-    
-    
 
 	private void start() {
 		MyLog.logInfo("start......");
-		this.spider.isRun = true;
-		SecondStep2.state = State.def;
-		this.jButton_stop.setText("暂停,我要修改设置");
+		Constant.state = State.def;
+		this.jButton_stop.setText("暂停，我要修改设置");
 		
 		new Thread(
     			new Runnable() {
 					
 					@Override
 					public void run() {
-						// TODO Auto-generated method stub
 						try {
 							spider.start();
 						} catch (Exception e) {
@@ -421,7 +373,6 @@ public class ShowJFrame extends javax.swing.JFrame {
 	
 	private void stop() {
 		MyLog.logInfo("stop......");
-		this.spider.isRun = false;
 		this.spider.stop();
 		this.jButton_stop.setText("重新抓取");
 	}
