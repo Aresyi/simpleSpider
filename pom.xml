@@ -25,15 +25,13 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
 		<!-- 共用包 -->
-		<spring_version>3.2.2.RELEASE</spring_version>
+		<spring_version>4.0.5.RELEASE</spring_version>
 		<cglib_version>2.2</cglib_version>
 
 		<!-- 日志包 -->
 		<slf4j_version>1.6.1</slf4j_version>
 		<log4j_version>1.2.8</log4j_version>
 		
-		<httpcore_version>4.3.3</httpcore_version>
-		<httpclient_version>4.3.6</httpclient_version>
 		<commons_httpclient_version>3.0.1</commons_httpclient_version>
 
 	</properties>
@@ -80,16 +78,6 @@
 			</dependency>
 
 
-			<dependency>
-				<groupId>org.apache.httpcomponents</groupId>
-				<artifactId>httpcore</artifactId>
-				<version>${httpcore_version}</version>
-			</dependency>
-			<dependency>
-				<groupId>org.apache.httpcomponents</groupId>
-				<artifactId>httpclient</artifactId>
-				<version>${httpclient_version}</version>
-			</dependency>
 			<dependency>
 				<groupId>commons-httpclient</groupId>
 				<artifactId>commons-httpclient</artifactId>
@@ -210,20 +198,16 @@
 		</dependency>
 		
 		<dependency>
-			<groupId>org.apache.httpcomponents</groupId>
-			<artifactId>httpclient</artifactId>
-		</dependency>
-
-		<dependency>
-			<groupId>org.apache.httpcomponents</groupId>
-			<artifactId>httpcore</artifactId>
-		</dependency>
-
-		<dependency>
 			<groupId>commons-httpclient</groupId>
 			<artifactId>commons-httpclient</artifactId>
 		</dependency>
-
+		
+		<dependency>
+    		<groupId>org.apache.httpcomponents</groupId>
+    		<artifactId>httpclient</artifactId>
+    		<version>4.5.3</version>
+		</dependency>
+		
 	</dependencies>
 
 	<build />
