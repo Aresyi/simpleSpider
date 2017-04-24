@@ -1,5 +1,6 @@
 package com.ydj.common;
 
+import com.zhuaqu.ali1688.ui.Ali1688CheckCodeFormData;
 import com.zhuaqu.ali1688.ui.State;
 
 /**  
@@ -25,5 +26,8 @@ public class Constant {
 	
 	
 	public static State state = State.def;
+	
+	
+	public static Ali1688CheckCodeFormData ali1688CheckCodeFormData;
 	
 }

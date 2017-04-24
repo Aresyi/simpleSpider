@@ -56,12 +56,16 @@ public class Test extends JPanel {
     }
     
     public static void main(String[] args) {    
-        final String url = "http://www.baidu.com";    
-        final String title = "DJ NativeSwiting Test";    
-       
-        Test test = new Test(url);
-        
-        test.brower(title, url);
+//        final String url = "http://www.baidu.com";    
+//        final String title = "DJ NativeSwiting Test";    
+//       
+//        Test test = new Test(url);
+//        
+//        test.brower(title, url);
+    	
+//    	WebView browser = new WebView();
+//    	WebEngine webEngine = browser.getEngine();
+//    	webEngine.load("http://mySite.com");
     }    
     
 }    

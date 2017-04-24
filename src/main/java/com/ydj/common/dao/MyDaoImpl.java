@@ -35,6 +35,11 @@ public class MyDaoImpl extends MultiDataSourceDaoSupport implements MyDao {
 		this.getJdbcTemplate()
         .update("INSERT INTO info_1688(typeOf,company,storeURL,mainProduct,address,bussModel,contact,tel,createTime,updateTime,spider) VALUES(?,?,?,?,?,?,?,?,?,?,?)",
             new Object[] { typeOf,company,storeURL,mainProduct,address,bussModel,contact,tel,now,updateTime,Constant.currentUser});
+	
+		this.getJdbcTemplate()
+        .update("update user_info set updateTime=?,zhuaquCount=zhuaquCount+1 where userName = ?",
+            new Object[] { now,Constant.currentUser});
+	
 	}
 
 	
@@ -86,9 +91,17 @@ public class MyDaoImpl extends MultiDataSourceDaoSupport implements MyDao {
 
 	@Override
 	public int updateUserConfig(String userAgent, String cookie) {
-		this.getJdbcTemplate().update("update user_info set userAgent=?,cookie=? where userName = ?",new Object[] { userAgent,cookie,Constant.currentUser});
+		
+		String savePath = Constant.savePath;
+		
+		if(savePath.contains("/")){
+			savePath = savePath.substring(0, savePath.indexOf("/"));
+		}
+		
+		this.getJdbcTemplate().update("update user_info set userAgent=?,cookie=?,savePath=? where userName = ?",new Object[] { userAgent,cookie,savePath,Constant.currentUser});
 		return 0;
 	}
+	
 	
 	
 	

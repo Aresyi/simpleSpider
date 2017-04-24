@@ -118,6 +118,7 @@ public class MainJFrame extends javax.swing.JFrame {
 							JSONObject userConfInfo = ConfigData.getUserInfo(userName);
 							jTextField_userAgent.setText(userConfInfo.getString("userAgent"));
 							jTextField_cookie.setText(userConfInfo.getString("cookie"));
+							jTextField_savePath.setText(userConfInfo.getString("savePath"));
 						}
 					}
 					
@@ -327,8 +328,8 @@ public class MainJFrame extends javax.swing.JFrame {
     	}
     	
     	Constant.currentUser = spiderName.toString();
-    	ConfigData.setConfig(userAgent, cookie, alertSet, frequencySet);
     	Constant.savePath = savePath;
+    	ConfigData.setConfig(userAgent, cookie, alertSet, frequencySet);
 
     	//TODO: 保存用户输入，缓存
     	

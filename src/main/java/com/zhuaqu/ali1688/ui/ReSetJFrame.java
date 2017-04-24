@@ -5,8 +5,13 @@
 package com.zhuaqu.ali1688.ui;
 
 import java.awt.Toolkit;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 
-import com.browe.Test;
+import javax.swing.JOptionPane;
+
 import com.ydj.simpleSpider.MyLog;
 
 
@@ -17,7 +22,7 @@ import com.ydj.simpleSpider.MyLog;
  * @version : 1.0
  * @description :
  */
-public class ReSetJFrame extends javax.swing.JFrame {
+public class ReSetJFrame extends javax.swing.JFrame implements ActionListener {
 
     /**
 	 * 
@@ -168,12 +173,13 @@ public class ReSetJFrame extends javax.swing.JFrame {
     	MyLog.logInfo("alertSet: "+alertSet.toString());
     	MyLog.logInfo("frequencySet: "+frequencySet.toString());
     	
-    	String url = "https://sec.1688.com/query.htm?smApp=kylin&smPolicy=kylin-index-anti_Spider-seo-html-checkcode&smCharset=GBK&smTag=NTguMjQ3LjExMi44Miw0NDg2OTQ3MDQsNTY2ZWQ0YzY0MTEwNDNlYTk3NDQ0YTc0OTkxNDNiN2Q%3D&smReturn=https%3A%2F%2Fshop1413621119921.1688.com%2F&smSign=RK3rud0KvlC133bJny4wzQ%3D%3D";
-		
-		Test test = new Test(url);
-		test.brower(url, url);
+//    	String url = "https://sec.1688.com/query.htm?smApp=kylin&smPolicy=kylin-index-anti_Spider-seo-html-checkcode&smCharset=GBK&smTag=NTguMjQ3LjExMi44Miw0NDg2OTQ3MDQsNTY2ZWQ0YzY0MTEwNDNlYTk3NDQ0YTc0OTkxNDNiN2Q%3D&smReturn=https%3A%2F%2Fshop1413621119921.1688.com%2F&smSign=RK3rud0KvlC133bJny4wzQ%3D%3D";
+//		
+//		Test test = new Test(url);
+//		test.brower(url, url);
 
-
+		  MyDialog dlg = new MyDialog(this,true);
+          dlg.show();
     	
     	
     	
@@ -223,6 +229,13 @@ public class ReSetJFrame extends javax.swing.JFrame {
 	private javax.swing.JComboBox jTextField_frequencySet;
     
     private javax.swing.JButton jButton_connect;
+
+
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
     
     // End of variables declaration//GEN-END:variables
 }

@@ -26,13 +26,13 @@ public class Ali1688Data {
 	String address;
 	
 	/**生产类型*/
-	String bussModel;
+	String bussModel="";
 
 	/**联系人*/
-	String contact;
+	String contact="";
 	
 	/**联系电话*/
-	String tel ;
+	String tel="" ;
 
 	/**
 	 * @param typeOf

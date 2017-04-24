@@ -5,11 +5,14 @@
 package com.zhuaqu.ali1688.ui;
 
 import java.awt.Toolkit;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.util.Timer;
 import java.util.TimerTask;
 
 import javax.swing.JOptionPane;
 
+import com.browe.Test;
 import com.ydj.common.Constant;
 import com.ydj.common.dao.DaoFactory;
 import com.ydj.simpleSpider.MyLog;
@@ -29,16 +32,16 @@ public class ShowJFrame extends javax.swing.JFrame {
 
 	private SpiderAli spider ;
 	
-	private static int sumSuccessCount = 0 ;
+	private int sumSuccessCount = 0 ;
 	
 	private int myHistoryCount = ConfigData.getZhuaquSumCount();
 
 	private boolean resetConfFlag = true;
 	
 	
-    public ShowJFrame(SpiderAli obj) {
+    public ShowJFrame(SpiderAli spider) {
     	this();
-    	this.spider = obj;
+    	this.spider = spider;
     }
 	
 	
@@ -63,6 +66,7 @@ public class ShowJFrame extends javax.swing.JFrame {
     		 return ;
     	 }
     	 
+    	 
     	 jLabel_requestShow.setText("抓取请求数："+spider.sum);
          jLabel_successShow.setText("抓取成功数："+spider.success);
          jLabel_failShow.setText("抓取失败数："+spider.fail);
@@ -74,69 +78,75 @@ public class ShowJFrame extends javax.swing.JFrame {
  			this.jButton_stop.setText("重新抓取");
  		}
          
-         
-         Object[] options = { "我已修复，继续抓！", "去一边！" };  
-         String alertMsg = "";
-         
-        switch (Constant.state) {
-			case needSignIn:
-				alertMsg = "抓取已经暂停，需要在‘浏览器’【重新登录】或【重新设置Cookie和UserAgent】";
-				options[0] = "我已重新登录，继续抓！";
-				break;
-			case needCheckcode:
-				alertMsg = "抓取已经暂停，需要在‘浏览器’【输入验证码】";
-				options[0] = "我已输入验证码，继续抓！";
-				break;
-			case gtFailCount:
-				alertMsg = "连续"+Constant.alertCount+"次未抓到联系方式，抓取已暂停，请检查是否需要【手动输入验证码】或【重新设置Cookie】或【重新登录】";
-				break; 
-			default:
-			break;
-		}
-         
-         if(Toolbox.isNotEmpty(alertMsg)){
-        	
-        	int m = -1 ; 
-        	if(Constant.state == State.needSignIn){ //
-        		//ReSetJFrame reSetFrame = new ReSetJFrame();
-        		//reSetFrame.setVisible(true);
-        		
-//        		String url = "https://login.1688.com/member/signin.htm";
-//        		url = "https://sec.1688.com/query.htm?smApp=kylin&smPolicy=kylin-index-anti_Spider-seo-html-checkcode&smCharset=GBK&smTag=NTguMjQ3LjExMi44Miw0NDg2OTQ3MDQsNTY2ZWQ0YzY0MTEwNDNlYTk3NDQ0YTc0OTkxNDNiN2Q%3D&smReturn=https%3A%2F%2Fshop1413621119921.1688.com%2F&smSign=RK3rud0KvlC133bJny4wzQ%3D%3D";
-//        		
-//        		Test test = new Test(url);
-//				test.brower(url, url);
-        		
-        		if(resetConfFlag){
-        			JOptionPane.showMessageDialog(null, alertMsg,"蛋疼",JOptionPane.ERROR_MESSAGE);
-        			resetConfFlag = false;
-        		}
-        		
-        		
-        	}else {
-        		
-        		
-//        		if(SecondStep2.state == State.needCheckcode){
-//            		String url = "https://sec.1688.com/query.htm?smApp=kylin&smPolicy=kylin-index-anti_Spider-seo-html-checkcode&smCharset=GBK&smTag=NTguMjQ3LjExMi44Miw0NDg2OTQ3MDQsNTY2ZWQ0YzY0MTEwNDNlYTk3NDQ0YTc0OTkxNDNiN2Q%3D&smReturn=https%3A%2F%2Fshop1413621119921.1688.com%2F&smSign=RK3rud0KvlC133bJny4wzQ%3D%3D";
-//            		
-//            		Test test = new Test(url);
-//    				test.brower(url, url);
-//        		}
-        		
-        		
-        		m = JOptionPane.showOptionDialog(null, alertMsg, "蛋疼",JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE, null, options, options[0]); 
-        		System.out.println("m:"+m);
-        		
-        		if(m == 0){
-         	    	start();
-         	    }else{
-         	    	System.exit(-1);
-         	    }
-        	}
-     	    
-     	    
-         }
+         alert();
 	}
+    
+    
+    private void alert(){
+    	  Object[] options = { "我已修复，继续抓！", "去一边！" };  
+          String alertMsg = "";
+          
+         switch (Constant.state) {
+ 			case needSignIn:
+ 				alertMsg = "抓取已经暂停，需要在‘浏览器’【重新登录】或【重新设置Cookie和UserAgent】";
+ 				options[0] = "我已重新登录，继续抓！";
+ 				break;
+ 			case needCheckcode:
+ 				alertMsg = "抓取已经暂停，需要在‘浏览器’【输入验证码】";
+ 				options[0] = "我已输入验证码，继续抓！";
+ 				break;
+ 			case gtFailCount:
+ 				alertMsg = "连续"+Constant.alertCount+"次未抓到联系方式，抓取已暂停，请检查是否需要【手动输入验证码】或【重新设置Cookie】或【重新登录】";
+ 				break; 
+ 			default:
+ 			break;
+ 		}
+         
+        
+        if(Constant.state == State.needSignIn){ //
+      		
+      		if(resetConfFlag){
+      			JOptionPane.showMessageDialog(null, alertMsg,"蛋疼",JOptionPane.ERROR_MESSAGE);
+      			resetConfFlag = false;
+      		}
+      		
+      		
+      	}else if(Constant.state == State.needCheckcode && Constant.ali1688CheckCodeFormData != null){
+      		
+      		MyDialog dlg = new MyDialog(this,true);
+            dlg.setVisible(true);
+             
+             this.addWindowListener(new WindowAdapter() {
+                 public void windowDeactivated(WindowEvent e) {
+                     setVisible(true);
+                 }
+
+             });
+      		
+             if(dlg.isOK()){
+             	Constant.ali1688CheckCodeFormData = null;
+             	start();
+             }
+             
+  		}else {
+      		
+  			if(Toolbox.isEmptyString(alertMsg)){
+  				return ;
+  	        }
+  			
+  			int m = JOptionPane.showOptionDialog(null, alertMsg, "蛋疼",JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE, null, options, options[0]); 
+      		System.out.println("m:"+m);
+      		
+      		if(m == 0){
+       	    	start();
+       	    }else{
+       	    	System.exit(-1);
+       	    }
+      	} 
+          
+         
+    }
+    
     
     private void schedule(){
 		timer.schedule(new TimerTask() {

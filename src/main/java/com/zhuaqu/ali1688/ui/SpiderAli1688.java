@@ -1,5 +1,26 @@
 package com.zhuaqu.ali1688.ui;
 
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
+
+import org.apache.http.Header;
+import org.apache.http.HeaderIterator;
+import org.apache.http.HttpEntity;
+import org.apache.http.HttpResponse;
+import org.apache.http.NameValuePair;
+import org.apache.http.ParseException;
+import org.apache.http.client.entity.UrlEncodedFormEntity;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.impl.client.HttpClients;
+import org.apache.http.message.BasicNameValuePair;
+import org.apache.http.util.EntityUtils;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -52,6 +73,9 @@ public class SpiderAli1688 {
 				Constant.state = State.needCheckcode;
 				//MyLog.logError(html);
 				Toolbox.save2File(Constant.savePath, url.replace("//", ".")+".html", html,"GBK");
+				
+				Constant.ali1688CheckCodeFormData = getCheckCodeFormData(url,html);
+				
 				return "";
 			}
 			
@@ -147,8 +171,170 @@ public class SpiderAli1688 {
 		
 	}
 	
+	/**
+	 * 获取输入验证码页面信息
+	 * 
+	 * @param url
+	 * @param checkCodePageHtml
+	 * @return
+	 *
+	 * @author : Ares.yi
+	 * @createTime : 2017年4月24日 上午10:18:10
+	 */
+	public static Ali1688CheckCodeFormData getCheckCodeFormData(String url,String checkCodePageHtml){
+		Ali1688CheckCodeFormData ali1688CheckCodeFormData= null;
+		
+		if(Toolbox.isEmptyString(checkCodePageHtml)){
+			return ali1688CheckCodeFormData;
+		}
+		
+		Document doc = Jsoup.parse(checkCodePageHtml);
+		
+		String action = doc.select("input[name=action]").attr("value");
+	    String event_submit_do_query = doc.select("input[name=event_submit_do_query]").attr("value");
+	    String smPolicy = doc.select("input[name=smPolicy]").attr("value");
+	    String smReturn = doc.select("input[name=smReturn]").attr("value");
+	    String smApp = doc.select("input[name=smApp]").attr("value");
+	    String smCharset = doc.select("input[name=smCharset]").attr("value");
+	    String smTag = doc.select("input[name=smTag]").attr("value");
+	    String smSign = doc.select("input[name=smSign]").attr("value");
+	    String identity = doc.select("input[name=identity]").attr("value");
+	    String captcha = doc.select("input[name=captcha]").attr("value");
+	    
+	    String sessionid = doc.select("img[id=checkcodeImg]").attr("src"); 
+	    
+	    sessionid = sessionid.substring(sessionid.indexOf("sessionid=")+10,sessionid.indexOf("&"));
+		
+		ali1688CheckCodeFormData = new Ali1688CheckCodeFormData(action, event_submit_do_query, smPolicy, smReturn, smApp, smCharset, smTag, smSign, identity, captcha, sessionid,url);
+	    
+		return ali1688CheckCodeFormData;
+	}
+	
+	/**
+	 * 提交验证码
+	 * 
+	 * @param checkcode
+	 *
+	 * @author : Ares.yi
+	 * @throws UnsupportedEncodingException 
+	 * @createTime : 2017年4月24日 上午10:18:36
+	 */
+	public static String submitCheckCode(String checkcode) throws UnsupportedEncodingException{
+		CloseableHttpClient client = HttpClients.createDefault();
+
+		String smApp = Constant.ali1688CheckCodeFormData.getSmApp();
+		String smPolicy = Constant.ali1688CheckCodeFormData.getSmPolicy();
+		String smCharset = Constant.ali1688CheckCodeFormData.getSmCharset();
+		String smTag = Constant.ali1688CheckCodeFormData.getSmTag();
+		String smReturn = Constant.ali1688CheckCodeFormData.getSmReturn();
+		String smSign = Constant.ali1688CheckCodeFormData.getSmSign();
+		
+		String get = "smApp="+smApp+"&smPolicy="+smPolicy+"&smCharset="+smCharset+"&smTag="+smTag+"&smReturn="+smReturn+"&smSign="+smSign;
+		
+		try {
+			get = java.net.URLEncoder.encode(get,"utf-8");
+		} catch (UnsupportedEncodingException e1) {
+		}
+		
+		String formAction = "https://sec.1688.com/query.htm?"+get;
+		
+		System.out.println("formAction:"+formAction);
+		
+	    HttpPost httpPost = new HttpPost(formAction);
+	    Map<String,String> parameterMap = new HashMap<String,String>();
+	    parameterMap.put("action", Constant.ali1688CheckCodeFormData.getAction());
+	    parameterMap.put("event_submit_do_query", Constant.ali1688CheckCodeFormData.getEvent_submit_do_query());
+	    parameterMap.put("smPolicy", smPolicy);
+	    parameterMap.put("smReturn", smReturn);
+	    parameterMap.put("smApp", smApp);
+	    parameterMap.put("smCharset", smCharset);
+	    parameterMap.put("smTag", smTag);
+	    parameterMap.put("smSign", smSign);
+	    parameterMap.put("identity", Constant.ali1688CheckCodeFormData.getIdentity());
+	    parameterMap.put("captcha", Constant.ali1688CheckCodeFormData.getCaptcha());
+	    parameterMap.put("checkcode", checkcode);
+	    
+	    
+
+	    UrlEncodedFormEntity postEntity = new UrlEncodedFormEntity(getParam(parameterMap), "UTF-8");
+	    httpPost.setEntity(postEntity);
+	    
+	    httpPost.addHeader("HOST", "sec.1688.com");
+	    httpPost.addHeader("User-Agent", Constant.userAgent);
+	    httpPost.addHeader("Accept", "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8");
+	    httpPost.addHeader("Cookie", Constant.cookie);
+	    
+	    MyLog.logInfo("request line:" + httpPost.getRequestLine());
+	    try {
+	      // 执行post请求
+	      HttpResponse httpResponse = client.execute(httpPost);
+	      
+	      
+	      Header header = httpResponse.getFirstHeader("Location");
+	      
+	      if (header != null && Toolbox.isNotEmpty(header.getValue())) {
+	    	  	MyLog.logInfo("location:"+header.getValue());
+	    	  	return "SUCCESS";
+	      }else{
+	    	  String html = printResponse(httpResponse);
+	    	  
+	    	  Constant.ali1688CheckCodeFormData = getCheckCodeFormData(smReturn,html);
+	      }
+
+	    } catch (IOException e) {
+	      e.printStackTrace();
+	    } finally {
+	      try {
+	        // 关闭流并释放资源
+	        client.close();
+	      } catch (IOException e) {
+	        e.printStackTrace();
+	      }
+	    }
+	    
+	    return "";
+	}
+	
+	 @SuppressWarnings("rawtypes")
+	public static List<NameValuePair> getParam(Map parameterMap) {
+		    List<NameValuePair> param = new ArrayList<NameValuePair>();
+		    Iterator it = parameterMap.entrySet().iterator();
+		    while (it.hasNext()) {
+		      Entry parmEntry = (Entry) it.next();
+		      param.add(new BasicNameValuePair((String) parmEntry.getKey(),
+		          (String) parmEntry.getValue()));
+		    }
+		    return param;
+		  }
+	 
+	 public static String printResponse(HttpResponse httpResponse)
+		      throws ParseException, IOException {
+		    // 获取响应消息实体
+		    HttpEntity entity = httpResponse.getEntity();
+		    // 响应状态
+		   MyLog.logInfo("status:" + httpResponse.getStatusLine());
+		   MyLog.logInfo("headers:");
+		    HeaderIterator iterator = httpResponse.headerIterator();
+		    while (iterator.hasNext()) {
+		    	MyLog.logInfo("\t" + iterator.next());
+		    }
+		    // 判断响应实体是否为空
+		    if (entity != null) {
+		      String responseString = EntityUtils.toString(entity);
+		      MyLog.logInfo("response length:" + responseString.length());
+		      MyLog.logInfo("response content:"+ responseString.replace("\r\n", ""));
+		      return responseString;
+		    }
+		    
+		    return "";
+	}
+	
 	
 	public static void main(String[] args) throws Exception {
+		String sessionid="https://pin.aliyun.com/get_img?sessionid=1b8446edf673ba260fc14486afc8b48d&identity=sm-kylin&type=default";
 		
+		sessionid = sessionid.substring(sessionid.indexOf("sessionid=")+10,sessionid.indexOf("&"));
+		
+		System.out.println(sessionid);
 	}
 }

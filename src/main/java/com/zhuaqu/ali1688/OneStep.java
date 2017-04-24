@@ -1,7 +1,8 @@
 package com.zhuaqu.ali1688;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -102,7 +103,7 @@ public class OneStep {
 			
 			Ali1688Data data = new Ali1688Data(typeOf, company, storeURL,mainProduct, areaaddress,bussModel);
 			
-			String contactInfo = getContactInfo(data,storeURL);
+			String contactInfo = "";//getContactInfo(data,storeURL);
 			
 			System.out.println(page+"--->"+i+Common.TAB+company+Common.TAB+storeURL+Common.TAB+mainProduct+Common.TAB+areaaddress+Common.TAB+bussModel+Common.TAB+contactInfo);
 			
@@ -111,7 +112,7 @@ public class OneStep {
 			DaoFactory.getMyDao().save(typeOf, company, storeURL, mainProduct, areaaddress, bussModel, data.contact, data.tel);
 			
 			try {
-				Thread.sleep(Common.getRandomNumber(1000, 2000));
+				Thread.sleep(Common.getRandomNumber(500, 1300));
 			} catch (Exception e) {
 			}
 		}
@@ -123,20 +124,20 @@ public class OneStep {
 		
 		new InitApp();
 		
-		Set<Integer> set = new HashSet<Integer>();
+		List<Integer> list = new ArrayList<Integer>();
 		
-		while(set.size() < 100 ){
-			int i = Common.getRandomNumber(1, 100);
-			
-			if(!set.contains(i)){
-				set.add(i);
-			}
+		for(int i=1 ;i<101;i++){
+			list.add(i);
 		}
 		
-		int typeOf = 8;
-		String url = "https://s.1688.com/company/company_search.htm?keywords=%B3%C4%C9%C0&pageSize=30&offset=3&beginPage=";
+		Collections.shuffle(list);//尽量打乱翻页顺序
 		
-		for(int page : set){
+		
+		
+		int typeOf = 14;
+		String url = "https://s.1688.com/company/company_search.htm?keywords=%CF%CA%BB%EE%CB%AE%B2%FA%C6%B7&pageSize=30&offset=3&beginPage=";
+		
+		for(int page : list){
 			getStoreInfo(typeOf,url+page,page);
 		}
 		
