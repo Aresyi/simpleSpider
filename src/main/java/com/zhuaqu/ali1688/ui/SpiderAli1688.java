@@ -42,6 +42,12 @@ import com.zhuaqu.Common;
 public class SpiderAli1688 {
 	
 	private static int lessThanPageSizeOfPage = 100;
+	private static int lessThanPageSizeOfPageSize = 0;
+	
+	private static int maxPage = 100;
+	private static int noDataPage = 100;
+	
+	private static int sum = 0;
 	
 	/**
 	 * 抓取店铺详情联系人页面信息
@@ -120,14 +126,26 @@ public class SpiderAli1688 {
 	 * @param typeOf
 	 * @param url
 	 * @param page
+	 * @param min
+	 * @param max
 	 *
 	 * @author : Ares.yi
 	 * @createTime : 2017年4月21日 下午3:00:15
 	 */
-	public static void getStoreInfo(int typeOf,String url,int page){
+	public static void getStoreInfo(int typeOf,String url,int page,int min,int max){
 		
-		if( page > lessThanPageSizeOfPage ){
-			MyLog.logError("由于此前获取到["+lessThanPageSizeOfPage+"]页数据小于30，故默认认为["+page+"]页没数据。");
+		if(page > lessThanPageSizeOfPage){
+			MyLog.logError("由于此前获取到["+lessThanPageSizeOfPage+"]页数据["+lessThanPageSizeOfPageSize+"]小于30，故默认认为["+page+"]页没数据。");
+			return ;
+		}
+		
+		if(page > noDataPage){
+			MyLog.logError("由于此前获取到["+noDataPage+"]页也无数据，故默认认为["+page+"]页没数据。");
+			return ;
+		}
+		
+		if(page > maxPage){
+			MyLog.logError("本条目最多["+maxPage+"]页，故默认认为["+page+"]页没数据。");
 			return ;
 		}
 		
@@ -145,13 +163,22 @@ public class SpiderAli1688 {
 				Thread.sleep(Common.getRandomNumber(800, 1500));
 			} catch (Exception e) {
 			}
+			noDataPage  = page;
 			return ;
 		}
 		
+		try {
+			String maxPageStr = doc.select("input[id=jumpto]").attr("data-max");
+			maxPage = Integer.parseInt(maxPageStr);
+		} catch (Exception e) {
+		}
+		
+		
 		int pageSize = elements.size();
 		
-		if(pageSize < ( 30 - 3 ) ){//发现规律：每页页面数据30+/-3,即浮动3条记录
+		if(pageSize < (30 - 5) ){//发现规律：每页页面数据30+/-5,即浮动5条记录
 			lessThanPageSizeOfPage = page;
+			lessThanPageSizeOfPageSize = pageSize;
 		}
 		
 		for(int i = 0 ; i < elements.size(); i++){
@@ -179,16 +206,18 @@ public class SpiderAli1688 {
 			
 			Ali1688Data data = new Ali1688Data(typeOf, company, storeURL,mainProduct, areaaddress,bussModel);
 			
-			String contactInfo = getContactInfo(data,storeURL);
+			String contactInfo = "";//getContactInfo(data,storeURL); //分步抓取
 			
 			MyLog.logInfo(page+"--->"+i+Common.TAB+company+Common.TAB+storeURL+Common.TAB+mainProduct+Common.TAB+areaaddress+Common.TAB+bussModel+Common.TAB+contactInfo);
 			
-			MyLog.logInfo("---------------------");
+			int res = DaoFactory.getMyDao().save(typeOf, company, storeURL, mainProduct, areaaddress, bussModel, data.contact, data.tel);
 			
-			DaoFactory.getMyDao().save(typeOf, company, storeURL, mainProduct, areaaddress, bussModel, data.contact, data.tel);
+			if(res > 0){
+				sum++;
+			}
 			
 			try {
-				Thread.sleep(Common.getRandomNumber(1000, 2000));
+				Thread.sleep(Common.getRandomNumber(min, max));
 			} catch (Exception e) {
 			}
 		}
@@ -352,7 +381,19 @@ public class SpiderAli1688 {
 		    
 		    return "";
 	}
+	 
+	 
+	 public static void makeZero(){
+		 lessThanPageSizeOfPage = 100 ;//归位
+		 lessThanPageSizeOfPageSize = 0;
+		 maxPage = 100;
+		 noDataPage = 100;
+		 sum = 0;
+	 }
 	
+	 public static int getSum(){
+		 return sum;
+	 }
 	
 	public static void main(String[] args) throws Exception {
 		String sessionid="https://pin.aliyun.com/get_img?sessionid=1b8446edf673ba260fc14486afc8b48d&identity=sm-kylin&type=default";

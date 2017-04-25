@@ -147,7 +147,7 @@ public class MyDialog extends Dialog implements ActionListener {
 		cancel.addActionListener(this);
 		exit.addActionListener(this);
 
-		this.setIconImage(Toolkit.getDefaultToolkit().createImage(ReSetJFrame.class.getResource("logo.png")));
+		this.setIconImage(Toolkit.getDefaultToolkit().createImage(CateSpiderJFrame.class.getResource("logo.png")));
 		this.setLocationRelativeTo(null);
 
 	}

@@ -22,7 +22,7 @@ public class MyDaoImpl extends MultiDataSourceDaoSupport implements MyDao {
 
 
 	@Override
-	public void save(int typeOf,String company,String storeURL,String mainProduct,String address,String bussModel,String contact,String tel) {
+	public int save(int typeOf,String company,String storeURL,String mainProduct,String address,String bussModel,String contact,String tel) {
 		
 		long now = System.currentTimeMillis();
 		
@@ -35,16 +35,13 @@ public class MyDaoImpl extends MultiDataSourceDaoSupport implements MyDao {
 		int count = this.getJdbcTemplate().queryForObject("SELECT COUNT(id) FROM info_1688 WHERE storeURL=?",new Object[] {storeURL},Integer.class);
 		
 		if(count > 0){//此前未建立唯一索引  不知道不同分类中会抓到相同的店铺
-			return ;
+			return -1;
 		}
 		
-		this.getJdbcTemplate()
+		return this.getJdbcTemplate()
         .update("INSERT INTO info_1688(typeOf,company,storeURL,mainProduct,address,bussModel,contact,tel,createTime,updateTime,spider) VALUES(?,?,?,?,?,?,?,?,?,?,?)",
             new Object[] { typeOf,company,storeURL,mainProduct,address,bussModel,contact,tel,now,updateTime,Constant.currentUser});
 	
-//		this.getJdbcTemplate()
-//        .update("update user_info set updateTime=?,zhuaquCount=zhuaquCount+1 where userName = ?",
-//            new Object[] { now,Constant.currentUser});
 	
 	}
 
@@ -106,6 +103,36 @@ public class MyDaoImpl extends MultiDataSourceDaoSupport implements MyDao {
 		
 		this.getJdbcTemplate().update("update user_info set userAgent=?,cookie=?,savePath=? where userName = ?",new Object[] { userAgent,cookie,savePath,Constant.currentUser});
 		return 0;
+	}
+
+
+
+	@Override
+	public int saveStore(String keyword, String beginURL, String iuCode) {
+		long now = System.currentTimeMillis();
+		this.getJdbcTemplate()
+        .update("INSERT INTO store_1688(beginURL,keyword,iuCode,createTime,creater) VALUES(?,?,?,?,?)",
+            new Object[] { beginURL,keyword,iuCode,now,Constant.currentUser});
+		return 0;
+	}
+
+
+
+	@Override
+	public JSONObject getStore(String beginURL) {
+		try {
+			return this.getJdbcTemplate().queryForObject("select * from store_1688 where beginURL=?",new Object[] {beginURL}, new JSONPropertyRowMapper() );
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+
+
+
+	@Override
+	public int updateStore(String beginURL, int spiderCount) {
+		return this.getJdbcTemplate().update("update store_1688 set spiderCount=?,spiderEndTime=? where beginURL=?",new Object[] {spiderCount,System.currentTimeMillis(),beginURL});
 	}
 	
 	

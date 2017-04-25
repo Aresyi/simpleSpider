@@ -15,7 +15,7 @@ import net.sf.json.JSONObject;
  */
 public interface MyDao {
 
-	public void save(int typeOf,String company,String storeURL,String mainProduct,String address,String bussModel,String contact,String tel);
+	public int save(int typeOf,String company,String storeURL,String mainProduct,String address,String bussModel,String contact,String tel);
 	
 	public List<JSONObject> getList()throws Exception;
 	
@@ -26,5 +26,12 @@ public interface MyDao {
 	public List<JSONObject> getUserInfoList()throws Exception;
 	
 	public int updateUserConfig(String userAgent,String cookie);
+	
+	
+	public int saveStore(String keyword,String startURL,String iuCode);
+	
+	public JSONObject getStore(String startURL);
+	
+	public int updateStore(String startURL,int spiderCount);
 	
 }

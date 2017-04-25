@@ -5,14 +5,18 @@
 package com.zhuaqu.ali1688.ui;
 
 import java.awt.Toolkit;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 
-import com.browe.Test;
 import com.ydj.common.Constant;
 import com.ydj.common.dao.DaoFactory;
 import com.ydj.simpleSpider.MyLog;
@@ -182,6 +186,60 @@ public class ShowJFrame extends javax.swing.JFrame {
         jLabel_successShow.setText("抓取成功数：0");
         jLabel_failShow.setText("抓取失败数：0");
         jLabel_sumSuccessShow.setText("总计："+sumSuccessCount+"  ["+myHistoryCount+"]");
+        
+        
+        
+        
+        
+        
+        JMenu jm=new JMenu("菜单") ;    
+        JMenuItem t1 = new JMenuItem("分类抓取") ; 
+        JMenuItem t2 = new JMenuItem("抓取报表") ;
+        jm.add(t1) ;
+        jm.add(t2) ;
+        JMenuBar  br =new  JMenuBar() ;
+        br.add(jm) ;
+        
+        this.setJMenuBar(br) ;
+        
+        
+        t1.addMouseListener(new MouseListener() {
+			
+			@Override
+			public void mouseReleased(MouseEvent e) {
+				// TODO Auto-generated method stub
+				MyLog.logInfo("mouseReleased");
+			}
+			
+			@Override
+			public void mousePressed(MouseEvent e) {
+				// TODO Auto-generated method stub
+				MyLog.logInfo("mousePressed");
+				CateSpiderJFrame ui = new CateSpiderJFrame();
+				ui.setVisible(true);
+			}
+			
+			@Override
+			public void mouseExited(MouseEvent e) {
+				// TODO Auto-generated method stub
+				MyLog.logInfo("mouseExited");
+			}
+			
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				// TODO Auto-generated method stub
+				MyLog.logInfo("mouseEntered");
+			}
+			
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				MyLog.logInfo("mouseClicked："+e);
+				
+				MyLog.logInfo("mouseClicked："+e.getID());
+			}
+		});
+        
+        
         
         
         

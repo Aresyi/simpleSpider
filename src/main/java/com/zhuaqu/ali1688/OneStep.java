@@ -182,8 +182,8 @@ public class OneStep {
 		
 		Map<Integer,String> all = new HashMap<Integer,String>();
 		
-		all.put(4, "https://s.1688.com/company/company_search.htm?keywords=%B4%F2%B5%D7%C9%C0&sortType=pop&pageSize=30&offset=3&beginPage=");
-		all.put(5, "https://s.1688.com/company/company_search.htm?keywords=%C5%AE%BF%E3&pageSize=30&offset=3&beginPage=");
+//		all.put(4, "https://s.1688.com/company/company_search.htm?keywords=%B4%F2%B5%D7%C9%C0&sortType=pop&pageSize=30&offset=3&beginPage=");
+//		all.put(5, "https://s.1688.com/company/company_search.htm?keywords=%C5%AE%BF%E3&pageSize=30&offset=3&beginPage=");
 //		all.put(21, "https://s.1688.com/company/company_search.htm?keywords=%D5%EB%D6%AF%C3%E6%C1%CF&pageSize=30&offset=3&beginPage=");
 //		all.put(22, "https://s.1688.com/company/company_search.htm?smToken=230be9d1cb8249bbb5c5fdb877f3ed39&smSign=UIIQ6TsYSMLgxDNdFk4rSQ%3D%3D&keywords=%C9%B4%CF%DF&pageSize=30&offset=3&beginPage=");
 //		all.put(23, "https://s.1688.com/company/company_search.htm?smToken=e1055a6c808b4e5785578bfb9841ea33&smSign=C5vVUhufrZ5MFo7DXThipg%3D%3D&keywords=%C5%F7%B2%BC&pageSize=30&offset=3&beginPage=");
@@ -191,13 +191,22 @@ public class OneStep {
 //		all.put(25, "https://s.1688.com/company/company_search.htm?smToken=6494d62f31bc4cf2ab00a843e3540512&smSign=aK3Ow7USNLKsDUPfA36jgA%3D%3D&keywords=%BB%AF%D1%A7%CF%CB%CE%AC&pageSize=30&offset=3&beginPage=");
 //		all.put(26, "https://s.1688.com/company/company_search.htm?smToken=c4fa43964b52481aa5e0cf83acd28068&smSign=BOx2Wu7a3PlUk34DtbSTwQ%3D%3D&keywords=%C6%A4%B8%EF&pageSize=30&offset=3&beginPage=");
 //		all.put(27, "https://s.1688.com/company/company_search.htm?showStyle=popular&smToken=57fb5649f9664288bc0aab3560e138fa&smSign=fA8oDZtcZkH5GfFLa7Gkxw%3D%3D&keywords=%BB%A4%B7%F4%C6%B7&pageSize=30&offset=3&beginPage=");
-		all.put(28, "https://s.1688.com/company/company_search.htm?keywords=%B2%CA%D7%B1%CF%E3%B7%D5&pageSize=30&offset=3&beginPage=");
-		all.put(29, "https://s.1688.com/company/company_search.htm?keywords=%C3%E6%C4%A4&pageSize=30&offset=3&beginPage=");
-		all.put(30, "https://s.1688.com/company/company_search.htm?showStyle=popular&keywords=%CA%D6%B9%A4%D4%ED&pageSize=30&offset=3&beginPage=");
-		all.put(31, "https://s.1688.com/company/company_search.htm?showStyle=noimg&smToken=64337435788c4138a4e05cced39da336&smSign=FD%2FOGf3zMqe8wxEfaisDug%3D%3D&keywords=%BD%DE%C3%AB%B8%E0&pageSize=30&offset=3&beginPage=");
-		all.put(32, "https://s.1688.com/company/company_search.htm?showStyle=noimg&keywords=BB˪&pageSize=30&offset=3&beginPage=");
-		all.put(33, "https://s.1688.com/company/company_search.htm?keywords=%D6%B8%BC%D7%D3%CD&pageSize=30&offset=3&beginPage=");
-		all.put(34, "https://s.1688.com/company/company_search.htm?smToken=4f735330954e485aa7eb76bb8e7d16d5&smSign=lnNGFO6nMpLkOCQ%2Fg5u8eA%3D%3D&keywords=%BC%D9%B7%A2&pageSize=30&offset=3&beginPage=");
+//		all.put(28, "https://s.1688.com/company/company_search.htm?keywords=%B2%CA%D7%B1%CF%E3%B7%D5&pageSize=30&offset=3&beginPage=");
+//		all.put(29, "https://s.1688.com/company/company_search.htm?keywords=%C3%E6%C4%A4&pageSize=30&offset=3&beginPage=");
+//		all.put(30, "https://s.1688.com/company/company_search.htm?showStyle=popular&keywords=%CA%D6%B9%A4%D4%ED&pageSize=30&offset=3&beginPage=");
+//		all.put(31, "https://s.1688.com/company/company_search.htm?showStyle=noimg&smToken=64337435788c4138a4e05cced39da336&smSign=FD%2FOGf3zMqe8wxEfaisDug%3D%3D&keywords=%BD%DE%C3%AB%B8%E0&pageSize=30&offset=3&beginPage=");
+//		all.put(32, "https://s.1688.com/company/company_search.htm?showStyle=noimg&keywords=BB˪&pageSize=30&offset=3&beginPage=");
+//		all.put(33, "https://s.1688.com/company/company_search.htm?keywords=%D6%B8%BC%D7%D3%CD&pageSize=30&offset=3&beginPage=");
+//		all.put(34, "https://s.1688.com/company/company_search.htm?smToken=4f735330954e485aa7eb76bb8e7d16d5&smSign=lnNGFO6nMpLkOCQ%2Fg5u8eA%3D%3D&keywords=%BC%D9%B7%A2&pageSize=30&offset=3&beginPage=");
+		all.put(35, "https://s.1688.com/company/company_search.htm?smToken=f29496876bbb47be8d5decee56f61ccf&smSign=OnPYOIMUKNJa%2BXYBdSyufQ%3D%3D&keywords=%B1%AD%D7%D3&pageSize=30&offset=3&beginPage=");
+		all.put(36, "https://s.1688.com/company/company_search.htm?smToken=216bb56dd2fe4a01949fc723d341b0f4&smSign=EN%2FLbwPaBXHvjm%2BjPGbqCQ%3D%3D&keywords=%B2%CD%BE%DF&pageSize=30&offset=3&beginPage=");
+		all.put(37, "https://s.1688.com/company/company_search.htm?categoryStyle=false&button_click=top&smToken=086175b99a1e46a3baf0d1d3214358e4&smSign=6NZU0X7mnPmXBXQ97xH8jQ%3D%3D&keywords=%B1%ED&pageSize=30&offset=3&beginPage=");
+		all.put(38, "https://s.1688.com/company/company_search.htm?smToken=86b1cc45279448b2a007891e6577f6c3&smSign=nn4iTbUnKMRkl1SsOA6xYw%3D%3D&keywords=%CA%D5%C4%C9&sortType=pop&pageSize=30&offset=3&beginPage=");
+		all.put(39, "https://s.1688.com/company/company_search.htm?smToken=ab3a1c85a455422eaef7a10f905c83f7&smSign=7I6U%2BwCT%2Fa1XfIBp3AWoBw%3D%3D&keywords=%C1%B9%CF%AF&pageSize=30&offset=3&beginPage=");
+		all.put(40, "https://s.1688.com/company/company_search.htm?smToken=9dd76ff1544a45a4b1f7abd96bced7e1&smSign=SEIp5qenTTYO%2FIuFRSQKAA%3D%3D&keywords=%BF%BF%B5%E6&pageSize=30&offset=3&beginPage=");
+		all.put(41, "https://s.1688.com/company/company_search.htm?smToken=d6da2e3cd2fe40fe8a4ab6e5f6aafe8d&smSign=iQy3J7IcTDJ9%2BGvDLDZG4Q%3D%3D&keywords=%CD%CF%B0%D1&pageSize=30&offset=3&beginPage=");
+		all.put(42, "https://s.1688.com/company/company_search.htm?smToken=012c8adff1484b8fb5ee221bd5476fe3&smSign=JmOVM58NS7FK8f5t3gM%2FBw%3D%3D&keywords=%B0%D9%BB%F5&sortType=pop&pageSize=30&offset=3&beginPage=");
+		
 		
 		for(int key : all.keySet()){
 			
