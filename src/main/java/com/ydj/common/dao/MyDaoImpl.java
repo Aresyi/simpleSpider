@@ -32,13 +32,19 @@ public class MyDaoImpl extends MultiDataSourceDaoSupport implements MyDao {
 			updateTime = now;
 		}
 		
+		int count = this.getJdbcTemplate().queryForObject("SELECT COUNT(id) FROM info_1688 WHERE storeURL=?",new Object[] {storeURL},Integer.class);
+		
+		if(count > 0){//此前未建立唯一索引  不知道不同分类中会抓到相同的店铺
+			return ;
+		}
+		
 		this.getJdbcTemplate()
         .update("INSERT INTO info_1688(typeOf,company,storeURL,mainProduct,address,bussModel,contact,tel,createTime,updateTime,spider) VALUES(?,?,?,?,?,?,?,?,?,?,?)",
             new Object[] { typeOf,company,storeURL,mainProduct,address,bussModel,contact,tel,now,updateTime,Constant.currentUser});
 	
-		this.getJdbcTemplate()
-        .update("update user_info set updateTime=?,zhuaquCount=zhuaquCount+1 where userName = ?",
-            new Object[] { now,Constant.currentUser});
+//		this.getJdbcTemplate()
+//        .update("update user_info set updateTime=?,zhuaquCount=zhuaquCount+1 where userName = ?",
+//            new Object[] { now,Constant.currentUser});
 	
 	}
 

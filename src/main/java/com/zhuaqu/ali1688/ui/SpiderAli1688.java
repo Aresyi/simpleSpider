@@ -41,6 +41,8 @@ import com.zhuaqu.Common;
  */
 public class SpiderAli1688 {
 	
+	private static int lessThanPageSizeOfPage = 100;
+	
 	/**
 	 * 抓取店铺详情联系人页面信息
 	 * 
@@ -124,11 +126,33 @@ public class SpiderAli1688 {
 	 */
 	public static void getStoreInfo(int typeOf,String url,int page){
 		
+		if( page > lessThanPageSizeOfPage ){
+			MyLog.logError("由于此前获取到["+lessThanPageSizeOfPage+"]页数据小于30，故默认认为["+page+"]页没数据。");
+			return ;
+		}
+		
 		String html = Toolbox.getHtmlContent(url);
 		
 		//System.out.println(html);
 
-		Elements elements = Jsoup.parse(html).select("div[class=list-item-left]");
+		Document doc = Jsoup.parse(html);
+		Elements elements = doc.select("div[class=list-item-left]");
+		
+		Elements noResult =  doc.select("h2[class=noresult-hd]");
+		if(noResult != null && noResult.text().contains("没找到")){
+			MyLog.logError("NO Result:"+url);
+			try {
+				Thread.sleep(Common.getRandomNumber(800, 1500));
+			} catch (Exception e) {
+			}
+			return ;
+		}
+		
+		int pageSize = elements.size();
+		
+		if(pageSize < ( 30 - 3 ) ){//发现规律：每页页面数据30+/-3,即浮动3条记录
+			lessThanPageSizeOfPage = page;
+		}
 		
 		for(int i = 0 ; i < elements.size(); i++){
 			Element one = elements.get(i);
