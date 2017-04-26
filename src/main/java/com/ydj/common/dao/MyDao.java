@@ -34,4 +34,11 @@ public interface MyDao {
 	
 	public int updateStore(String startURL,int spiderCount);
 	
+	
+	public List<JSONObject> getUserSpiderInfoReport()throws Exception;
+	
+	public List<JSONObject> getCategorySpiderReport()throws Exception;
+	
+	public List<JSONObject> getReport()throws Exception;
+	
 }

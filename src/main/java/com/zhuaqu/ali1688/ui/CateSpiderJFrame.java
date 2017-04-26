@@ -380,20 +380,20 @@ public class CateSpiderJFrame extends javax.swing.JFrame implements ActionListen
 	
 	private void businessProcess(String keyword,String startURL,String iuCode,int min,int max){
 		
-		JSONObject json = DaoFactory.getMyDao().getStore(startURL);
-
-		if(json != null){
-			this.jLabel_msg.setText("入口URL已经存在");
-			return ;
-		}
-		
-		DaoFactory.getMyDao().saveStore(keyword, startURL, iuCode);
-		
-		json = DaoFactory.getMyDao().getStore(startURL);
-		
-		if(json == null){
-			return ;
-		}
+//		JSONObject json = DaoFactory.getMyDao().getStore(startURL);
+//
+//		if(json != null){
+//			this.jLabel_msg.setText("入口URL已经存在");
+//			return ;
+//		}
+//		
+//		DaoFactory.getMyDao().saveStore(keyword, startURL, iuCode);
+//		
+//		json = DaoFactory.getMyDao().getStore(startURL);
+//		
+//		if(json == null){
+//			return ;
+//		}
 		 
 		 this.jButton_start.setEnabled(false);
 		 
@@ -401,13 +401,13 @@ public class CateSpiderJFrame extends javax.swing.JFrame implements ActionListen
 		 
 		List<Integer> list = new ArrayList<Integer>();
 		
-		for(int i=1 ;i<101;i++){
+		for(int i=1 ;i<2;i++){
 			list.add(i);
 		}
 		
 		Collections.shuffle(list);//尽量打乱翻页顺序
 		
-		int typeOf = json.getInt("id");
+		int typeOf = 43;//json.getInt("id");
 		
 		for(int page : list){
 			SpiderAli1688.getStoreInfo(typeOf, startURL+page, page,min,max);
@@ -416,6 +416,8 @@ public class CateSpiderJFrame extends javax.swing.JFrame implements ActionListen
 		int spiderCount = SpiderAli1688.getSum();
 		
 		DaoFactory.getMyDao().updateStore(startURL, spiderCount);
+		
+		JOptionPane.showMessageDialog(null, "成功抓取【keyword】共【"+spiderCount+"】条记录","提示",JOptionPane.INFORMATION_MESSAGE); 
 		
 		SpiderAli1688.makeZero();
 		

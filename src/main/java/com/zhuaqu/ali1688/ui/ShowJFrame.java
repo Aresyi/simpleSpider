@@ -66,6 +66,7 @@ public class ShowJFrame extends javax.swing.JFrame {
     private Timer timer = new Timer();
     
     private void refresh(){
+    	
     	 if(this.spider == null){
     		 return ;
     	 }
@@ -83,6 +84,7 @@ public class ShowJFrame extends javax.swing.JFrame {
  		}
          
          alert();
+         
 	}
     
     
@@ -240,6 +242,42 @@ public class ShowJFrame extends javax.swing.JFrame {
 		});
         
         
+        
+        t2.addMouseListener(new MouseListener() {
+			
+			@Override
+			public void mouseReleased(MouseEvent e) {
+				// TODO Auto-generated method stub
+				MyLog.logInfo("mouseReleased");
+			}
+			
+			@Override
+			public void mousePressed(MouseEvent e) {
+				// TODO Auto-generated method stub
+				MyLog.logInfo("mousePressed");
+				ReportJFrame ui = new ReportJFrame();
+				ui.setVisible(true);
+			}
+			
+			@Override
+			public void mouseExited(MouseEvent e) {
+				// TODO Auto-generated method stub
+				MyLog.logInfo("mouseExited");
+			}
+			
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				// TODO Auto-generated method stub
+				MyLog.logInfo("mouseEntered");
+			}
+			
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				MyLog.logInfo("mouseClicked："+e);
+				
+				MyLog.logInfo("mouseClicked："+e.getID());
+			}
+		});
         
         
         

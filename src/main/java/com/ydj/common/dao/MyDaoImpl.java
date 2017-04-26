@@ -134,6 +134,27 @@ public class MyDaoImpl extends MultiDataSourceDaoSupport implements MyDao {
 	public int updateStore(String beginURL, int spiderCount) {
 		return this.getJdbcTemplate().update("update store_1688 set spiderCount=?,spiderEndTime=? where beginURL=?",new Object[] {spiderCount,System.currentTimeMillis(),beginURL});
 	}
+
+
+
+	@Override
+	public List<JSONObject> getUserSpiderInfoReport() throws Exception {
+		return this.getJdbcTemplate().query("SELECT spider  AS 'spider',COUNT(1) AS 'sum',MAX(updateTime) AS 'updateTime' FROM info_1688 WHERE  tel<>'' GROUP BY spider ORDER BY COUNT(1) DESC ",new JSONPropertyRowMapper());
+	}
+
+
+
+	@Override
+	public List<JSONObject> getCategorySpiderReport() throws Exception {
+		return this.getJdbcTemplate().query("SELECT (SELECT keyword FROM store_1688 WHERE id= info.typeOf) AS 'category',COUNT(1) AS 'sum',MAX(updateTime) AS 'updateTime' FROM info_1688 info WHERE  tel<>'' GROUP BY typeof ORDER BY COUNT(1) DESC ",new JSONPropertyRowMapper());
+	}
+
+
+
+	@Override
+	public List<JSONObject> getReport() throws Exception {
+		return this.getJdbcTemplate().query("SELECT COUNT(1) AS '总信息数',COUNT(IF(tel<>'',TRUE,NULL)) AS '总有效数' FROM info_1688 ",new JSONPropertyRowMapper());
+	}
 	
 	
 	

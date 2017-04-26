@@ -269,6 +269,7 @@ public class MainJFrame extends javax.swing.JFrame {
         this.setLocationRelativeTo(null);
         
         this.setSize(500, 550);
+        
     }
     
     
@@ -300,7 +301,6 @@ public class MainJFrame extends javax.swing.JFrame {
     } 
     
     
-
     private void connectJButtonActionPerformed(java.awt.event.ActionEvent evt) {
     	
     	Object spiderName = jTextField_spider.getSelectedItem();
