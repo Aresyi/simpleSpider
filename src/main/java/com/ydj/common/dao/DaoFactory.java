@@ -2,7 +2,7 @@
 package com.ydj.common.dao;
 
 
-import com.zhuaqu.SystemContext;
+import com.ydj.zhuaqu.SystemContext;
 
 /**
  * 

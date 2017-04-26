@@ -33,6 +33,8 @@ import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.util.EntityUtils;
 import org.jsoup.Jsoup;
 
+import com.ydj.common.MyLog;
+
 /**
 *
 * @author : Ares.yi

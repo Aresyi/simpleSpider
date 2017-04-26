@@ -17,6 +17,8 @@ import org.apache.http.util.EntityUtils;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Element;
 
+import com.ydj.common.MyLog;
+
 /**
 *
 * @author : Ares.yi
