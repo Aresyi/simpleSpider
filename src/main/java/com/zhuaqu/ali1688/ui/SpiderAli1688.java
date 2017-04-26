@@ -128,24 +128,25 @@ public class SpiderAli1688 {
 	 * @param page
 	 * @param min
 	 * @param max
+	 * @param iuCode
 	 *
 	 * @author : Ares.yi
 	 * @createTime : 2017年4月21日 下午3:00:15
 	 */
-	public static void getStoreInfo(int typeOf,String url,int page,int min,int max){
+	public static void getStoreInfo(int typeOf,String url,int page,int min,int max,String iuCode){
 		
 		if(page > lessThanPageSizeOfPage){
-			MyLog.logError("由于此前获取到["+lessThanPageSizeOfPage+"]页数据["+lessThanPageSizeOfPageSize+"]小于30，故默认认为["+page+"]页没数据。");
+			MyLog.logError(typeOf+" 由于此前获取到["+lessThanPageSizeOfPage+"]页数据["+lessThanPageSizeOfPageSize+"]小于30，故默认认为["+page+"]页没数据。");
 			return ;
 		}
 		
 		if(page > noDataPage){
-			MyLog.logError("由于此前获取到["+noDataPage+"]页也无数据，故默认认为["+page+"]页没数据。");
+			MyLog.logError(typeOf+" 由于此前获取到["+noDataPage+"]页也无数据，故默认认为["+page+"]页没数据。");
 			return ;
 		}
 		
 		if(page > maxPage){
-			MyLog.logError("本条目最多["+maxPage+"]页，故默认认为["+page+"]页没数据。");
+			MyLog.logError(typeOf+" 本条目最多["+maxPage+"]页，故默认认为["+page+"]页没数据。");
 			return ;
 		}
 		
@@ -208,9 +209,9 @@ public class SpiderAli1688 {
 			
 			String contactInfo = "";//getContactInfo(data,storeURL); //分步抓取
 			
-			MyLog.logInfo(page+"--->"+i+Common.TAB+company+Common.TAB+storeURL+Common.TAB+mainProduct+Common.TAB+areaaddress+Common.TAB+bussModel+Common.TAB+contactInfo);
+			MyLog.logInfo("typeOf:"+typeOf+Common.TAB+page+"--->"+i+Common.TAB+company+Common.TAB+storeURL+Common.TAB+mainProduct+Common.TAB+areaaddress+Common.TAB+bussModel+Common.TAB+contactInfo);
 			
-			int res = DaoFactory.getMyDao().save(typeOf, company, storeURL, mainProduct, areaaddress, bussModel, data.contact, data.tel);
+			int res = DaoFactory.getMyDao().save(typeOf, company, storeURL, mainProduct, areaaddress, bussModel, data.contact, data.tel,iuCode);
 			
 			if(res > 0){
 				sum++;

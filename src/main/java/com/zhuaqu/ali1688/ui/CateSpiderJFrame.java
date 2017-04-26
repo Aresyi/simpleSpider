@@ -247,7 +247,7 @@ public class CateSpiderJFrame extends javax.swing.JFrame implements ActionListen
     		msg += "  请填写关键词" ;
     	}
     	
-    	if(Toolbox.isEmptyString(startURL) || !startURL.startsWith("https://s.1688.com/") || startURL.lastIndexOf("beginPage=") < 0){
+    	if(Toolbox.isEmptyString(startURL) || !startURL.startsWith("https://s.1688.com/") || !startURL.endsWith("beginPage=") ){
     		JOptionPane.showMessageDialog(null, "入口URL必须以【https://s.1688.com/】开始和【beginPage=】结束","提示",JOptionPane.ERROR_MESSAGE); 
     		return ;
     	}
@@ -276,7 +276,10 @@ public class CateSpiderJFrame extends javax.swing.JFrame implements ActionListen
 			
 			@Override
 			public void run() {
-				businessProcess(keyword, startURL, ((Industry)iuCode2).value, minTime, maxTime);
+				
+				Industry industry = (Industry)iuCode2;
+				
+				businessProcess(keyword, startURL, industry.key,industry.value, minTime, maxTime);
 			}
 		}).start();
     }
@@ -378,22 +381,22 @@ public class CateSpiderJFrame extends javax.swing.JFrame implements ActionListen
 	
 	
 	
-	private void businessProcess(String keyword,String startURL,String iuCode,int min,int max){
+	private void businessProcess(String keyword,String startURL,String iuCode,String iuName,int min,int max){
 		
-//		JSONObject json = DaoFactory.getMyDao().getStore(startURL);
-//
-//		if(json != null){
-//			this.jLabel_msg.setText("入口URL已经存在");
-//			return ;
-//		}
-//		
-//		DaoFactory.getMyDao().saveStore(keyword, startURL, iuCode);
-//		
-//		json = DaoFactory.getMyDao().getStore(startURL);
-//		
-//		if(json == null){
-//			return ;
-//		}
+		JSONObject json = DaoFactory.getMyDao().getStore(startURL);
+
+		if(json != null){
+			this.jLabel_msg.setText("入口URL已经存在");
+			return ;
+		}
+		
+		DaoFactory.getMyDao().saveStore(keyword, startURL, iuCode,iuName);
+		
+		json = DaoFactory.getMyDao().getStore(startURL);
+		
+		if(json == null){
+			return ;
+		}
 		 
 		 this.jButton_start.setEnabled(false);
 		 
@@ -401,16 +404,16 @@ public class CateSpiderJFrame extends javax.swing.JFrame implements ActionListen
 		 
 		List<Integer> list = new ArrayList<Integer>();
 		
-		for(int i=1 ;i<2;i++){
+		for(int i=1 ;i<101;i++){
 			list.add(i);
 		}
 		
 		Collections.shuffle(list);//尽量打乱翻页顺序
 		
-		int typeOf = 43;//json.getInt("id");
+		int typeOf = json.getInt("id");
 		
 		for(int page : list){
-			SpiderAli1688.getStoreInfo(typeOf, startURL+page, page,min,max);
+			SpiderAli1688.getStoreInfo(typeOf, startURL+page, page,min,max,iuCode);
 		}
 		
 		int spiderCount = SpiderAli1688.getSum();

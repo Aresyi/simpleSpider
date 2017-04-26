@@ -159,7 +159,7 @@ public class OneStep {
 			
 			//System.out.println("---------------------");
 			
-			DaoFactory.getMyDao().save(typeOf, company, storeURL, mainProduct, areaaddress, bussModel, data.contact, data.tel);
+			DaoFactory.getMyDao().save(typeOf, company, storeURL, mainProduct, areaaddress, bussModel, data.contact, data.tel,"");
 			
 			try {
 				Thread.sleep(Common.getRandomNumber(600, 1800));

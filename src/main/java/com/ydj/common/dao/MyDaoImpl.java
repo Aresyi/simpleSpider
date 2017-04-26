@@ -22,7 +22,7 @@ public class MyDaoImpl extends MultiDataSourceDaoSupport implements MyDao {
 
 
 	@Override
-	public int save(int typeOf,String company,String storeURL,String mainProduct,String address,String bussModel,String contact,String tel) {
+	public int save(int typeOf,String company,String storeURL,String mainProduct,String address,String bussModel,String contact,String tel,String iuCode) {
 		
 		long now = System.currentTimeMillis();
 		
@@ -39,8 +39,8 @@ public class MyDaoImpl extends MultiDataSourceDaoSupport implements MyDao {
 		}
 		
 		return this.getJdbcTemplate()
-        .update("INSERT INTO info_1688(typeOf,company,storeURL,mainProduct,address,bussModel,contact,tel,createTime,updateTime,spider) VALUES(?,?,?,?,?,?,?,?,?,?,?)",
-            new Object[] { typeOf,company,storeURL,mainProduct,address,bussModel,contact,tel,now,updateTime,Constant.currentUser});
+        .update("INSERT INTO info_1688(typeOf,company,storeURL,mainProduct,address,bussModel,contact,tel,createTime,updateTime,spider,iuCode) VALUES(?,?,?,?,?,?,?,?,?,?,?,?)",
+            new Object[] { typeOf,company,storeURL,mainProduct,address,bussModel,contact,tel,now,updateTime,Constant.currentUser,iuCode});
 	
 	
 	}
@@ -108,11 +108,11 @@ public class MyDaoImpl extends MultiDataSourceDaoSupport implements MyDao {
 
 
 	@Override
-	public int saveStore(String keyword, String beginURL, String iuCode) {
+	public int saveStore(String keyword, String beginURL, String iuCode,String iuName) {
 		long now = System.currentTimeMillis();
 		this.getJdbcTemplate()
-        .update("INSERT INTO store_1688(beginURL,keyword,iuCode,createTime,creater) VALUES(?,?,?,?,?)",
-            new Object[] { beginURL,keyword,iuCode,now,Constant.currentUser});
+        .update("INSERT INTO store_1688(beginURL,keyword,iuCode,iuName,createTime,creater) VALUES(?,?,?,?,?,?)",
+            new Object[] { beginURL,keyword,iuCode,iuName,now,Constant.currentUser});
 		return 0;
 	}
 
@@ -123,7 +123,6 @@ public class MyDaoImpl extends MultiDataSourceDaoSupport implements MyDao {
 		try {
 			return this.getJdbcTemplate().queryForObject("select * from store_1688 where beginURL=?",new Object[] {beginURL}, new JSONPropertyRowMapper() );
 		} catch (Exception e) {
-			e.printStackTrace();
 		}
 		return null;
 	}
@@ -153,7 +152,21 @@ public class MyDaoImpl extends MultiDataSourceDaoSupport implements MyDao {
 
 	@Override
 	public List<JSONObject> getReport() throws Exception {
-		return this.getJdbcTemplate().query("SELECT COUNT(1) AS '总信息数',COUNT(IF(tel<>'',TRUE,NULL)) AS '总有效数' FROM info_1688 ",new JSONPropertyRowMapper());
+		return this.getJdbcTemplate().query("SELECT COUNT(1) AS '总信息数',COUNT(IF(tel<>'',TRUE,NULL)) AS '总有效数',COUNT(IF(tel='',(if(updateCount>=3,true,null)),NULL)) AS '3次都未抓取成功数' FROM info_1688 ",new JSONPropertyRowMapper());
+	}
+
+
+
+	@Override
+	public List<JSONObject> getMyCategoryReport() throws Exception {
+		return this.getJdbcTemplate().query("SELECT iuCode  AS '行业名称',COUNT(1) AS '总数',COUNT(IF(tel<>'',TRUE,NULL)) AS '有效数',COUNT(IF(tel='',(IF(updateCount>=3,TRUE,NULL)),NULL)) AS '3次都未抓取成功数',MAX(updateTime) AS '最后抓取时间' FROM info_1688 GROUP BY iuCode ORDER BY COUNT(1) DESC ",new JSONPropertyRowMapper());
+	}
+
+
+
+	@Override
+	public int updateZero() {
+		return this.getJdbcTemplate().update("UPDATE info_1688 SET updateCount=0,updateTime=0 WHERE tel='' AND updateCount>=3");
 	}
 	
 	

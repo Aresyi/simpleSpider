@@ -32,7 +32,11 @@ public class IndustryNewCache {
      * @return
      */
     public static String getName(String code){
-        return newMap.get(code);
+    	try {
+    		return newMap.get(code);
+		} catch (Exception e) {
+			return "未知分类";
+		}
     }
     
   

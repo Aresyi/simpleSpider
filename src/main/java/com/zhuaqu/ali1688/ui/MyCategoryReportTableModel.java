@@ -8,12 +8,12 @@ import net.sf.json.JSONObject;
 
 
 
-public class SumInfoReportTableModel implements TableModel{
+public class MyCategoryReportTableModel implements TableModel{
 
        private List<JSONObject> dataList; 
 
 
-      public SumInfoReportTableModel(List<JSONObject> userList){
+      public MyCategoryReportTableModel(List<JSONObject> userList){
 
           this.dataList=userList;
 
@@ -26,7 +26,7 @@ public class SumInfoReportTableModel implements TableModel{
 
 
      public int getColumnCount(){
-        return 3;
+        return 5;
      }
 
      public Class<?> getColumnClass(int columnIndex){
@@ -40,11 +40,20 @@ public class SumInfoReportTableModel implements TableModel{
     	 JSONObject one= dataList.get(rowIndex);
 
         if(columnIndex==0){
-            return one.getString("总信息数");
+            String code = one.getString("行业名称");
+            return IndustryNewCache.getName(code);
         }else if(columnIndex==1){
-            return one.getString("总有效数");
+            return one.getString("总数");
         }else if(columnIndex==2){
+            return one.getString("有效数");
+        }else if(columnIndex==3){
             return one.getString("3次都未抓取成功数");
+        }else if(columnIndex==4){
+        	try {
+        		return Toolbox.getDateString("yyyy-MM-dd HH:mm",one.getLong("最后抓取时间"));
+			} catch (Exception e) {
+				return "1970-01-01";
+			}
         }else{
             return "出错!";
         }
@@ -72,16 +81,22 @@ public class SumInfoReportTableModel implements TableModel{
 
 	@Override
 	public String getColumnName(int columnIndex) {
-		if(columnIndex==0){
-            return "总信息数(总记录数)";
-         }else if(columnIndex==1){
-            return "总有效数(有联系电话)";
-         }else if(columnIndex==2){
-             return "3次都未抓取成功数";
-          }else{
-            return "出错!";
-
-        }
+		
+		
+		 if(columnIndex==0){
+	            return "行业名称";
+	        }else if(columnIndex==1){
+	            return "总数";
+	        }else if(columnIndex==2){
+	            return "有效数";
+	        }else if(columnIndex==3){
+	            return "3次都未抓取成功数";
+	        }else if(columnIndex==4){
+	            return "最后更新时间";
+	        }else{
+	            return "出错!";
+	        }
+		
 	}
 
 	@Override
