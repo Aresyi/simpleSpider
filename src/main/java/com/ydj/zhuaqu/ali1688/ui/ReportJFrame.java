@@ -68,7 +68,7 @@ public class ReportJFrame extends javax.swing.JFrame{
        final javax.swing.JTable userSpiderInfoReportTable = new javax.swing.JTable();
        
 
-       UserSpiderInfoReportTableModel tm=new UserSpiderInfoReportTableModel(userSpiderInfoReportData);
+       UserReportTableModel tm=new UserReportTableModel(userSpiderInfoReportData);
 
         userSpiderInfoReportTable.setModel(tm);//将模型设给表格
         
@@ -90,7 +90,7 @@ public class ReportJFrame extends javax.swing.JFrame{
         final javax.swing.JTable categorySpiderInfoReportTable = new javax.swing.JTable();
         
 
-        CategorySpiderInfoReportTableModel tm2 = new CategorySpiderInfoReportTableModel(categorySpiderInfoReportData);
+        KeywordReportTableModel tm2 = new KeywordReportTableModel(categorySpiderInfoReportData);
 
          categorySpiderInfoReportTable.setModel(tm2);//将模型设给表格
          
@@ -109,7 +109,7 @@ public class ReportJFrame extends javax.swing.JFrame{
          final javax.swing.JTable myCategoryReportTable = new javax.swing.JTable();
          
 
-         MyCategoryReportTableModel tm3 = new  MyCategoryReportTableModel(myCategoryReportTableData);
+         CategoryReportTableModel tm3 = new  CategoryReportTableModel(myCategoryReportTableData);
 
          myCategoryReportTable.setModel(tm3);//将模型设给表格
           

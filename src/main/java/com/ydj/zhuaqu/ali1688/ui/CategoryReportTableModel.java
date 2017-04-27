@@ -17,10 +17,10 @@ import com.ydj.zhuaqu.ali1688.IndustryCache;
  * @description :
  *
  */
-public class MyCategoryReportTableModel extends MyTableModel {
+public class CategoryReportTableModel extends MyTableModel {
 
-	public MyCategoryReportTableModel(List<JSONObject> userList) {
-		super(userList);
+	public CategoryReportTableModel(List<JSONObject> dataList) {
+		super(dataList);
 	}
 
 	@Override

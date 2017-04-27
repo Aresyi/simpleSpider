@@ -16,10 +16,8 @@ import net.sf.json.JSONObject;
  */
 public class SumInfoReportTableModel extends MyTableModel {
 
-	private List<JSONObject> dataList;
-
-	public SumInfoReportTableModel(List<JSONObject> userList) {
-		super(userList);
+	public SumInfoReportTableModel(List<JSONObject> dataList) {
+		super(dataList);
 	}
 
 	public int getColumnCount() {

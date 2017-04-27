@@ -16,11 +16,11 @@ import com.ydj.common.kit.Toolbox;
 * @description : 
 *
  */
-public class UserSpiderInfoReportTableModel extends MyTableModel {
+public class UserReportTableModel extends MyTableModel {
 
 
-	public UserSpiderInfoReportTableModel(List<JSONObject> userList) {
-		super(userList);
+	public UserReportTableModel(List<JSONObject> dataList) {
+		super(dataList);
 	}
 
 	@Override
