@@ -28,10 +28,11 @@ import javax.swing.ListCellRenderer;
 
 import net.sf.json.JSONObject;
 
-import com.ydj.common.MyLog;
-import com.ydj.common.dao.DaoFactory;
+import com.ydj.common.kit.MyLog;
+import com.ydj.common.kit.Toolbox;
 import com.ydj.zhuaqu.ali1688.Industry;
-import com.ydj.zhuaqu.ali1688.IndustryNewCache;
+import com.ydj.zhuaqu.ali1688.IndustryCache;
+import com.ydj.zhuaqu.dao.DaoFactory;
 
 
 /**
@@ -41,14 +42,14 @@ import com.ydj.zhuaqu.ali1688.IndustryNewCache;
  * @version : 1.0
  * @description :
  */
-public class CateSpiderJFrame extends javax.swing.JFrame implements ActionListener {
+public class CategorySpiderJFrame extends javax.swing.JFrame implements ActionListener {
 
 	private static final long serialVersionUID = 1L;
 	
 	/**
      * Creates new form NewJFrame
      */
-    public CateSpiderJFrame() {
+    public CategorySpiderJFrame() {
         initComponents();
     }
     
@@ -156,7 +157,7 @@ public class CateSpiderJFrame extends javax.swing.JFrame implements ActionListen
         jCoboBox_iuCode1.setRenderer(new MyCellRenderer());
         jCoboBox_iuCode2.setRenderer(new MyCellRenderer());
         
-        List<Industry> oneList= IndustryNewCache.getOneIndustry(); 
+        List<Industry> oneList= IndustryCache.getOneIndustry(); 
         jCoboBox_iuCode1.addItem(new Industry("",""));
         for(Industry one : oneList){
         	jCoboBox_iuCode1.addItem(one);
@@ -174,7 +175,7 @@ public class CateSpiderJFrame extends javax.swing.JFrame implements ActionListen
 						MyLog.logInfo(key);
 						if(Toolbox.isNotEmpty(key)){
 							jCoboBox_iuCode2.addItem(new Industry("",""));
-						     	for(Industry one : IndustryNewCache.getSecondIndustry(key)){
+						     	for(Industry one : IndustryCache.getSecondIndustry(key)){
 						        	jCoboBox_iuCode2.addItem(one);
 						        }
 						}
@@ -224,7 +225,7 @@ public class CateSpiderJFrame extends javax.swing.JFrame implements ActionListen
         
 
         
-        this.setIconImage(Toolkit.getDefaultToolkit().createImage(CateSpiderJFrame.class.getResource("logo.png"))); 
+        this.setIconImage(Toolkit.getDefaultToolkit().createImage(CategorySpiderJFrame.class.getResource("logo.png"))); 
         this.setResizable(false);//设置不可以最大化
         this.setLocationRelativeTo(null);
         
@@ -300,19 +301,19 @@ public class CateSpiderJFrame extends javax.swing.JFrame implements ActionListen
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(CateSpiderJFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(CategorySpiderJFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(CateSpiderJFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(CategorySpiderJFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(CateSpiderJFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(CategorySpiderJFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(CateSpiderJFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(CategorySpiderJFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
     	
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new CateSpiderJFrame().setVisible(true);
+                new CategorySpiderJFrame().setVisible(true);
             }
         });
     }

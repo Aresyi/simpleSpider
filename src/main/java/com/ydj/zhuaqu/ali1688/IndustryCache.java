@@ -13,7 +13,7 @@ import java.util.Map;
 * @description : 
 *
  */
-public class IndustryNewCache {
+public class IndustryCache {
 	
 	private static Map<String,String> newMap = new HashMap<String, String>();
 	private static Map<String,List<Industry>> temp = new HashMap<String,List<Industry>>();
@@ -26,8 +26,7 @@ public class IndustryNewCache {
     }
     
     /**
-     * 根据最新的code获取最新的行业名称
-     * @author yanyu
+     * 根据code获取行业名称
      * @param code
      * @return
      */

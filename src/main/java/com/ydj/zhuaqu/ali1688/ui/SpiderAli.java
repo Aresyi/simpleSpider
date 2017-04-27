@@ -4,10 +4,12 @@ import java.util.List;
 
 import net.sf.json.JSONObject;
 
-import com.ydj.common.MyLog;
-import com.ydj.common.dao.DaoFactory;
-import com.ydj.zhuaqu.Common;
+import com.ydj.common.kit.FileKit;
+import com.ydj.common.kit.MyLog;
+import com.ydj.common.kit.Toolbox;
 import com.ydj.zhuaqu.ali1688.Ali1688Data;
+import com.ydj.zhuaqu.ali1688.State;
+import com.ydj.zhuaqu.dao.DaoFactory;
 
 /**  
  *
@@ -78,7 +80,7 @@ public class SpiderAli {
 						i = 0;
 					}
 					
-					Toolbox.save2File(Constant.savePath, fileName, txt,"UTF-8");
+					FileKit.save2File(Constant.savePath, fileName, txt,"UTF-8");
 				}
 				
 				alert = i;
@@ -97,7 +99,7 @@ public class SpiderAli {
 				DaoFactory.getMyDao().update(id, ali1688Data.getContact(), ali1688Data.getTel());
 				
 				try {
-					Thread.sleep(Common.getRandomNumber(Constant.frequencyMin, Constant.frequencyMax));
+					Thread.sleep(Toolbox.getRandomNumber(Constant.frequencyMin, Constant.frequencyMax));
 				} catch (Exception e) {
 				}
 			}

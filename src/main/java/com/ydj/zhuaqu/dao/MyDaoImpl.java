@@ -1,5 +1,5 @@
 /** **/
-package com.ydj.common.dao;
+package com.ydj.zhuaqu.dao;
 
 import java.util.List;
 
@@ -7,8 +7,8 @@ import net.sf.json.JSONObject;
 
 import com.ydj.common.JSONPropertyRowMapper;
 import com.ydj.common.MultiDataSourceDaoSupport;
+import com.ydj.common.kit.Toolbox;
 import com.ydj.zhuaqu.ali1688.ui.Constant;
-import com.ydj.zhuaqu.ali1688.ui.Toolbox;
 
 /**
  * 

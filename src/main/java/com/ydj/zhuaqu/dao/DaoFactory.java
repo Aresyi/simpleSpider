@@ -1,5 +1,5 @@
 /** **/
-package com.ydj.common.dao;
+package com.ydj.zhuaqu.dao;
 
 
 import com.ydj.zhuaqu.SystemContext;

@@ -1,13 +1,13 @@
-package com.ydj.zhuaqu.ali1688.localrun;
+package com.ydj.zhuaqu.ali1688.local.run;
 
 import java.util.List;
 
 import net.sf.json.JSONObject;
 
-import com.ydj.common.dao.DaoFactory;
-import com.ydj.zhuaqu.Common;
+import com.ydj.common.kit.Toolbox;
 import com.ydj.zhuaqu.InitApp;
 import com.ydj.zhuaqu.ali1688.Ali1688Data;
+import com.ydj.zhuaqu.dao.DaoFactory;
 
 /**  
  *
@@ -65,7 +65,7 @@ public class SecondStep {
 				DaoFactory.getMyDao().update(id, data.getContact(), data.getTel());
 				
 				try {
-					Thread.sleep(Common.getRandomNumber(1000, 5000));
+					Thread.sleep(Toolbox.getRandomNumber(1000, 5000));
 				} catch (Exception e) {
 				}
 			}

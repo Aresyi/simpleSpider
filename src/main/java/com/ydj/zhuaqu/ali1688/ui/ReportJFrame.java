@@ -16,7 +16,7 @@ import javax.swing.JScrollPane;
 
 import net.sf.json.JSONObject;
 
-import com.ydj.common.dao.DaoFactory;
+import com.ydj.zhuaqu.dao.DaoFactory;
 
 /**
 *

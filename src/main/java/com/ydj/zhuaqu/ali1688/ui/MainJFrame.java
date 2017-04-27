@@ -14,7 +14,8 @@ import javax.swing.JOptionPane;
 
 import net.sf.json.JSONObject;
 
-import com.ydj.common.MyLog;
+import com.ydj.common.kit.MyLog;
+import com.ydj.common.kit.Toolbox;
 import com.ydj.zhuaqu.InitApp;
 
 
@@ -40,7 +41,6 @@ public class MainJFrame extends javax.swing.JFrame {
      * Creates new form NewJFrame
      */
     public MainJFrame() {
-    	new InitApp();
         initComponents();
     }
 
@@ -384,6 +384,7 @@ public class MainJFrame extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
+            	new InitApp();
                 new MainJFrame().setVisible(true);
             }
         });

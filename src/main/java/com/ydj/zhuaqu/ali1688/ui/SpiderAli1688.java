@@ -2,34 +2,22 @@ package com.ydj.zhuaqu.ali1688.ui;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 
-import org.apache.http.Header;
-import org.apache.http.HeaderIterator;
-import org.apache.http.HttpEntity;
-import org.apache.http.HttpResponse;
-import org.apache.http.NameValuePair;
-import org.apache.http.ParseException;
-import org.apache.http.client.entity.UrlEncodedFormEntity;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.impl.client.CloseableHttpClient;
-import org.apache.http.impl.client.HttpClients;
-import org.apache.http.message.BasicNameValuePair;
-import org.apache.http.util.EntityUtils;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
-import com.ydj.common.MyLog;
-import com.ydj.common.dao.DaoFactory;
-import com.ydj.zhuaqu.Common;
+import com.ydj.common.kit.FileKit;
+import com.ydj.common.kit.HttpKit;
+import com.ydj.common.kit.MyLog;
+import com.ydj.common.kit.Toolbox;
+import com.ydj.zhuaqu.ali1688.Ali1688CheckCodeFormData;
 import com.ydj.zhuaqu.ali1688.Ali1688Data;
+import com.ydj.zhuaqu.ali1688.State;
+import com.ydj.zhuaqu.dao.DaoFactory;
 
 /**  
  *
@@ -64,7 +52,7 @@ public class SpiderAli1688 {
 		String ren = "" ,tel ="";
 		
 		try {
-			String html = Toolbox.getHtmlContent(url);
+			String html = HttpKit.getHtmlContent(url);
 			
 			Document doc = Jsoup.parse(html);
 			
@@ -72,7 +60,7 @@ public class SpiderAli1688 {
 			if(doc.select("div[class=return-cbu-signin]").size() > 0){
 				Constant.state = State.needSignIn;
 				//MyLog.logError(html);
-				Toolbox.save2File(Constant.savePath, url.replace("://", ".")+".html", html,"GBK");
+				FileKit.save2File(Constant.savePath, url.replace("://", ".")+".html", html,"GBK");
 				
 				return "";
 			}		
@@ -80,7 +68,7 @@ public class SpiderAli1688 {
 			if(doc.select("label[for=checkcodeInput]").size() > 0){
 				Constant.state = State.needCheckcode;
 				//MyLog.logError(html);
-				Toolbox.save2File(Constant.savePath, url.replace("//", ".")+".html", html,"GBK");
+				FileKit.save2File(Constant.savePath, url.replace("//", ".")+".html", html,"GBK");
 				
 				Constant.ali1688CheckCodeFormData = getCheckCodeFormData(url,html);
 				
@@ -97,7 +85,7 @@ public class SpiderAli1688 {
 				
 				String href = doc.select("li[data-page-name=contactinfo]").select("a").attr("href");
 				
-				html = Toolbox.getHtmlContent(href);
+				html = HttpKit.getHtmlContent(href);
 				
 				Document doc2 = Jsoup.parse(html);
 				
@@ -116,7 +104,7 @@ public class SpiderAli1688 {
 		data.setContact(ren);
 		data.setTel(tel);
 		
-		return ren+Common.TAB+tel;
+		return ren+Constant.TAB+tel;
 	}
 	
 
@@ -150,7 +138,7 @@ public class SpiderAli1688 {
 			return ;
 		}
 		
-		String html = Toolbox.getHtmlContent(url);
+		String html = HttpKit.getHtmlContent(url);
 		
 		//System.out.println(html);
 
@@ -161,7 +149,7 @@ public class SpiderAli1688 {
 		if(noResult != null && noResult.text().contains("没找到")){
 			MyLog.logError("NO Result:"+url);
 			try {
-				Thread.sleep(Common.getRandomNumber(800, 1500));
+				Thread.sleep(Toolbox.getRandomNumber(800, 1500));
 			} catch (Exception e) {
 			}
 			noDataPage  = page;
@@ -209,7 +197,7 @@ public class SpiderAli1688 {
 			
 			String contactInfo = "";//getContactInfo(data,storeURL); //分步抓取
 			
-			MyLog.logInfo("typeOf:"+typeOf+Common.TAB+page+"--->"+i+Common.TAB+company+Common.TAB+storeURL+Common.TAB+mainProduct+Common.TAB+areaaddress+Common.TAB+bussModel+Common.TAB+contactInfo);
+			MyLog.logInfo("typeOf:"+typeOf+Constant.TAB+page+"--->"+i+Constant.TAB+company+Constant.TAB+storeURL+Constant.TAB+mainProduct+Constant.TAB+areaaddress+Constant.TAB+bussModel+Constant.TAB+contactInfo);
 			
 			int res = DaoFactory.getMyDao().save(typeOf, company, storeURL, mainProduct, areaaddress, bussModel, data.getContact(), data.getTel(),iuCode);
 			
@@ -218,7 +206,7 @@ public class SpiderAli1688 {
 			}
 			
 			try {
-				Thread.sleep(Common.getRandomNumber(min, max));
+				Thread.sleep(Toolbox.getRandomNumber(min, max));
 			} catch (Exception e) {
 			}
 		}
@@ -273,8 +261,7 @@ public class SpiderAli1688 {
 	 * @throws UnsupportedEncodingException 
 	 * @createTime : 2017年4月24日 上午10:18:36
 	 */
-	public static String submitCheckCode(String checkcode) throws UnsupportedEncodingException{
-		CloseableHttpClient client = HttpClients.createDefault();
+	public static String submitCheckCode(String checkcode) throws UnsupportedEncodingException, IOException{
 
 		String smApp = Constant.ali1688CheckCodeFormData.getSmApp();
 		String smPolicy = Constant.ali1688CheckCodeFormData.getSmPolicy();
@@ -292,9 +279,6 @@ public class SpiderAli1688 {
 		
 		String formAction = "https://sec.1688.com/query.htm?"+get;
 		
-		System.out.println("formAction:"+formAction);
-		
-	    HttpPost httpPost = new HttpPost(formAction);
 	    Map<String,String> parameterMap = new HashMap<String,String>();
 	    parameterMap.put("action", Constant.ali1688CheckCodeFormData.getAction());
 	    parameterMap.put("event_submit_do_query", Constant.ali1688CheckCodeFormData.getEvent_submit_do_query());
@@ -308,82 +292,24 @@ public class SpiderAli1688 {
 	    parameterMap.put("captcha", Constant.ali1688CheckCodeFormData.getCaptcha());
 	    parameterMap.put("checkcode", checkcode);
 	    
+	    String res = HttpKit.postRequest(formAction, parameterMap,  "UTF-8");
 	    
-
-	    UrlEncodedFormEntity postEntity = new UrlEncodedFormEntity(getParam(parameterMap), "UTF-8");
-	    httpPost.setEntity(postEntity);
-	    
-	    httpPost.addHeader("HOST", "sec.1688.com");
-	    httpPost.addHeader("User-Agent", Constant.userAgent);
-	    httpPost.addHeader("Accept", "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8");
-	    httpPost.addHeader("Cookie", Constant.cookie);
-	    
-	    MyLog.logInfo("request line:" + httpPost.getRequestLine());
-	    try {
-	      // 执行post请求
-	      HttpResponse httpResponse = client.execute(httpPost);
-	      
-	      
-	      Header header = httpResponse.getFirstHeader("Location");
-	      
-	      if (header != null && Toolbox.isNotEmpty(header.getValue())) {
-	    	  	MyLog.logInfo("location:"+header.getValue());
+	    if (Toolbox.isNotEmpty(res) && "SUCCESS".equals(res)) {
 	    	  	return "SUCCESS";
-	      }else{
-	    	  String html = printResponse(httpResponse);
-	    	  
+	    }else{
+	    	  String html = res;
 	    	  Constant.ali1688CheckCodeFormData = getCheckCodeFormData(smReturn,html);
-	      }
-
-	    } catch (IOException e) {
-	      e.printStackTrace();
-	    } finally {
-	      try {
-	        // 关闭流并释放资源
-	        client.close();
-	      } catch (IOException e) {
-	        e.printStackTrace();
-	      }
-	    }
+	    } 
 	    
 	    return "";
 	}
 	
-	 @SuppressWarnings("rawtypes")
-	public static List<NameValuePair> getParam(Map parameterMap) {
-		    List<NameValuePair> param = new ArrayList<NameValuePair>();
-		    Iterator it = parameterMap.entrySet().iterator();
-		    while (it.hasNext()) {
-		      Entry parmEntry = (Entry) it.next();
-		      param.add(new BasicNameValuePair((String) parmEntry.getKey(),
-		          (String) parmEntry.getValue()));
-		    }
-		    return param;
-		  }
-	 
-	 public static String printResponse(HttpResponse httpResponse)
-		      throws ParseException, IOException {
-		    // 获取响应消息实体
-		    HttpEntity entity = httpResponse.getEntity();
-		    // 响应状态
-		   MyLog.logInfo("status:" + httpResponse.getStatusLine());
-		   MyLog.logInfo("headers:");
-		    HeaderIterator iterator = httpResponse.headerIterator();
-		    while (iterator.hasNext()) {
-		    	MyLog.logInfo("\t" + iterator.next());
-		    }
-		    // 判断响应实体是否为空
-		    if (entity != null) {
-		      String responseString = EntityUtils.toString(entity);
-		      MyLog.logInfo("response length:" + responseString.length());
-		      MyLog.logInfo("response content:"+ responseString.replace("\r\n", ""));
-		      return responseString;
-		    }
-		    
-		    return "";
-	}
-	 
-	 
+	 /**
+	  * 归零
+	  *
+	  * @author : Ares.yi
+	  * @createTime : 2017年4月27日 下午2:25:33
+	  */
 	 public static void makeZero(){
 		 lessThanPageSizeOfPage = 100 ;//归位
 		 lessThanPageSizeOfPageSize = 0;
@@ -392,15 +318,15 @@ public class SpiderAli1688 {
 		 sum = 0;
 	 }
 	
+	 /**
+	  * 获取总数
+	  * @return
+	  *
+	  * @author : Ares.yi
+	  * @createTime : 2017年4月27日 下午2:25:48
+	  */
 	 public static int getSum(){
 		 return sum;
 	 }
 	
-	public static void main(String[] args) throws Exception {
-		String sessionid="https://pin.aliyun.com/get_img?sessionid=1b8446edf673ba260fc14486afc8b48d&identity=sm-kylin&type=default";
-		
-		sessionid = sessionid.substring(sessionid.indexOf("sessionid=")+10,sessionid.indexOf("&"));
-		
-		System.out.println(sessionid);
-	}
 }

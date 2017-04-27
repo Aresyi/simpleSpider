@@ -9,14 +9,14 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import java.io.UnsupportedEncodingException;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
 
-import com.ydj.common.MyLog;
+import com.ydj.common.kit.MyLog;
+import com.ydj.common.kit.Toolbox;
 
 /**
  *
@@ -26,7 +26,7 @@ import com.ydj.common.MyLog;
  * @description :
  *
  */
-public class MyDialog extends Dialog implements ActionListener {
+public class CheckCodeDialog extends Dialog implements ActionListener {
 
 	private static final long serialVersionUID = 1L;
 
@@ -46,7 +46,7 @@ public class MyDialog extends Dialog implements ActionListener {
 	private boolean isOK = false;
 	
 	
-	MyDialog(JFrame parent, boolean modal) {
+	CheckCodeDialog(JFrame parent, boolean modal) {
 		super(parent, modal);
 		
 		
@@ -146,7 +146,7 @@ public class MyDialog extends Dialog implements ActionListener {
 		cancel.addActionListener(this);
 		exit.addActionListener(this);
 
-		this.setIconImage(Toolkit.getDefaultToolkit().createImage(CateSpiderJFrame.class.getResource("logo.png")));
+		this.setIconImage(Toolkit.getDefaultToolkit().createImage(CategorySpiderJFrame.class.getResource("logo.png")));
 		this.setLocationRelativeTo(null);
 
 	}
@@ -183,7 +183,7 @@ public class MyDialog extends Dialog implements ActionListener {
 					field_checkCode.setText("");
 				}
 				
-			} catch (UnsupportedEncodingException e1) {
+			} catch (Exception e1) {
 				e1.printStackTrace();
 			}
 		}

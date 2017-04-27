@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.ydj.common;
+package com.ydj.common.kit;
 
 import java.io.File;
 import java.io.FileOutputStream;

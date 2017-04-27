@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.ydj.simpleSpider;
+package com.ydj.zhuaqu.proxy;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
@@ -33,7 +33,7 @@ import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.util.EntityUtils;
 import org.jsoup.Jsoup;
 
-import com.ydj.common.MyLog;
+import com.ydj.common.kit.MyLog;
 
 /**
 *

@@ -1,4 +1,4 @@
-package com.ydj.zhuaqu.ali1688.ui;
+package com.ydj.zhuaqu.ali1688;
 
 /**  
  *

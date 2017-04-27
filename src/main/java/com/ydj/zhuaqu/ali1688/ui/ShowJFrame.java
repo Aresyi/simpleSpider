@@ -17,8 +17,10 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 
-import com.ydj.common.MyLog;
-import com.ydj.common.dao.DaoFactory;
+import com.ydj.common.kit.MyLog;
+import com.ydj.common.kit.Toolbox;
+import com.ydj.zhuaqu.ali1688.State;
+import com.ydj.zhuaqu.dao.DaoFactory;
 
 
 /**
@@ -118,7 +120,7 @@ public class ShowJFrame extends javax.swing.JFrame {
       		
       	}else if(Constant.state == State.needCheckcode && Constant.ali1688CheckCodeFormData != null){
       		
-      		MyDialog dlg = new MyDialog(this,true);
+      		CheckCodeDialog dlg = new CheckCodeDialog(this,true);
             dlg.setVisible(true);
              
              this.addWindowListener(new WindowAdapter() {
@@ -216,7 +218,7 @@ public class ShowJFrame extends javax.swing.JFrame {
 			public void mousePressed(MouseEvent e) {
 				// TODO Auto-generated method stub
 				MyLog.logInfo("mousePressed");
-				CateSpiderJFrame ui = new CateSpiderJFrame();
+				CategorySpiderJFrame ui = new CategorySpiderJFrame();
 				ui.setVisible(true);
 			}
 			

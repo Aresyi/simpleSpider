@@ -1,4 +1,4 @@
-package com.ydj.zhuaqu.ali1688.localrun;
+package com.ydj.zhuaqu.ali1688.local.run;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -11,12 +11,13 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
-import com.ydj.common.MyLog;
-import com.ydj.common.dao.DaoFactory;
-import com.ydj.zhuaqu.Common;
+import com.ydj.common.kit.HttpKit;
+import com.ydj.common.kit.MyLog;
+import com.ydj.common.kit.Toolbox;
 import com.ydj.zhuaqu.InitApp;
 import com.ydj.zhuaqu.ali1688.Ali1688Data;
-import com.ydj.zhuaqu.ali1688.ui.Toolbox;
+import com.ydj.zhuaqu.ali1688.ui.Constant;
+import com.ydj.zhuaqu.dao.DaoFactory;
 
 /**  
  *
@@ -33,7 +34,7 @@ public class OneStep {
 		String ren = "" ,tel ="";
 		
 		try {
-			String html = Common.getHtmlContent(url);
+			String html = HttpKit.getHtmlContent(url);
 			
 			Document doc = Jsoup.parse(html);
 			
@@ -48,7 +49,7 @@ public class OneStep {
 				
 				String href = doc.select("li[data-page-name=contactinfo]").select("a").attr("href");
 				
-				html = Common.getHtmlContent(href);
+				html = HttpKit.getHtmlContent(href);
 				
 				Document doc2 = Jsoup.parse(html);
 				
@@ -69,7 +70,7 @@ public class OneStep {
 		data.setContact(ren);
 		data.setTel(tel);
 		
-		return ren+Common.TAB+tel;
+		return ren+Constant.TAB+tel;
 	}
 	
 
@@ -97,9 +98,8 @@ public class OneStep {
 		}
 		
 		
-		String html = Common.getHtmlContent(url);
+		String html = HttpKit.getHtmlContent(url);
 		
-		//System.out.println(html);
 
 		Document doc = Jsoup.parse(html);
 		Elements elements = doc.select("div[class=list-item-left]");
@@ -108,7 +108,7 @@ public class OneStep {
 		if(noResult != null && noResult.text().contains("没找到")){
 			MyLog.logError("NO Result:"+url);
 			try {
-				Thread.sleep(Common.getRandomNumber(800, 1500));
+				Thread.sleep(Toolbox.getRandomNumber(800, 1500));
 			} catch (Exception e) {
 			}
 			noDataPage  = page;
@@ -156,14 +156,14 @@ public class OneStep {
 			
 			String contactInfo = "";//getContactInfo(data,storeURL);
 			
-			System.out.println("typeOf:"+typeOf+Common.TAB+page+"--->"+i+Common.TAB+company+Common.TAB+storeURL+Common.TAB+mainProduct+Common.TAB+areaaddress+Common.TAB+bussModel+Common.TAB+contactInfo);
+			System.out.println("typeOf:"+typeOf+Constant.TAB+page+"--->"+i+Constant.TAB+company+Constant.TAB+storeURL+Constant.TAB+mainProduct+Constant.TAB+areaaddress+Constant.TAB+bussModel+Constant.TAB+contactInfo);
 			
 			//System.out.println("---------------------");
 			
 			DaoFactory.getMyDao().save(typeOf, company, storeURL, mainProduct, areaaddress, bussModel, data.getContact(), data.getTel(),"");
 			
 			try {
-				Thread.sleep(Common.getRandomNumber(600, 1800));
+				Thread.sleep(Toolbox.getRandomNumber(600, 1800));
 			} catch (Exception e) {
 			}
 		}

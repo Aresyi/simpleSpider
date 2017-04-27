@@ -1,4 +1,4 @@
-package com.ydj.simpleSpider;
+package com.ydj.zhuaqu.proxy;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -17,7 +17,7 @@ import org.apache.http.util.EntityUtils;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Element;
 
-import com.ydj.common.MyLog;
+import com.ydj.common.kit.MyLog;
 
 /**
 *

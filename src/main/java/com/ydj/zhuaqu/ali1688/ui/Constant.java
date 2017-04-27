@@ -1,5 +1,8 @@
 package com.ydj.zhuaqu.ali1688.ui;
 
+import com.ydj.zhuaqu.ali1688.Ali1688CheckCodeFormData;
+import com.ydj.zhuaqu.ali1688.State;
+
 
 /**  
  *
