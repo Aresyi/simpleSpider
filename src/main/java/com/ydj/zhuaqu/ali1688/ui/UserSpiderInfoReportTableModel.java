@@ -18,7 +18,6 @@ import com.ydj.common.kit.Toolbox;
  */
 public class UserSpiderInfoReportTableModel extends MyTableModel {
 
-	private List<JSONObject> dataList;
 
 	public UserSpiderInfoReportTableModel(List<JSONObject> userList) {
 		super(userList);
