@@ -79,7 +79,7 @@ public class ShowJFrame extends javax.swing.JFrame {
          jLabel_sumSuccessShow.setText("总计："+(sumSuccessCount+spider.success)+"  ["+(myHistoryCount+spider.success)+"]");
 
          if(this.spider.isRun()){
- 			this.jButton_stop.setText("暂停,我要修改设置");
+ 			this.jButton_stop.setText("暂停，我要修改设置");
  		}else{
  			this.jButton_stop.setText("重新抓取");
  		}
