@@ -114,4 +114,90 @@ public class Toolbox {
 		
 		return contactInfo;
 	}
+	
+	
+	/**
+	 * 将首字母转小写
+	 * @param src
+	 * @return
+	 */
+	public static String indexToLowerCase(String src){//A-Z:65~90 a-z:97~122
+		if(src == null || "".equals(src.trim())){
+			return "";
+		}
+		int i = src.charAt(0);
+		if(i>=65 && i<=90){
+			return src.replaceFirst(src.charAt(0)+"", (char)(i+32)+""); //Note : 不可使用replace()方法
+		}
+		return src;
+	}
+	
+	/**
+	 * 将首字母转大写
+	 * @param src
+	 * @return
+	 */
+	public static String indexToUpperCase(String src){//A-Z:65~90 a-z:97~122
+		if(src == null || "".equals(src.trim())){
+			return "";
+		}
+		int i = src.charAt(0);
+		if(i>=97 && i<=122){
+			return src.replaceFirst(src.charAt(0)+"", (char)(i-32)+""); //Note : 不可使用replace()方法
+		}
+		return src;
+	}
+	
+
+	
+	/**
+	 * 将mysql数据库中数据类型转换为java中数据类型
+	 * <p>
+	 * <B>只�?�虑了目前主要使用的数据类型</B>
+	 * @param jdbcType
+	 * @return
+	 */
+	public static String jdbcType2JavaType(String jdbcType){
+		if(jdbcType == null){
+			return "String";
+		}
+		jdbcType = jdbcType.toUpperCase();
+		if("INTEGER".equals(jdbcType) || "INT".equals(jdbcType)){
+			return "int";
+		}
+		if("NUMERIC".equals(jdbcType) || "DOUBLE".equals(jdbcType)){
+			return "double";
+		}
+		if("FLOAT".equals(jdbcType)){
+			return "float";
+		}
+		if("BIGINT".equals(jdbcType)){
+			return "long";
+		}
+		return "String";
+	}
+	
+	/**
+	 * 获取默认值
+	 * @param javaType
+	 * @return
+	 */
+	public static String getDefaultValue(String javaType){
+		if(javaType == null){
+			return "''";
+		}
+		
+		javaType = javaType.toLowerCase();
+		
+		if("int".equals(javaType) 
+				|| "long".equals(javaType)
+				|| "double".equals(javaType)
+				|| "float".equals(javaType)
+				|| "short".equals(javaType)){
+			return "0";
+		}
+		
+		return "''";
+	}
+	
 }
