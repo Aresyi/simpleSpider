@@ -20,7 +20,6 @@ import javax.swing.JOptionPane;
 import com.ydj.common.kit.MyLog;
 import com.ydj.common.kit.Toolbox;
 import com.ydj.zhuaqu.ali1688.State;
-import com.ydj.zhuaqu.dao.DaoFactory;
 
 
 /**
@@ -37,10 +36,6 @@ public class ShowJFrame extends javax.swing.JFrame {
 
 	private SpiderAli spider ;
 	
-	private int sumSuccessCount = 0 ;
-	
-	private int myHistoryCount = ConfigData.getZhuaquSumCount();
-
 	private boolean resetConfFlag = true;
 	
 	
@@ -55,10 +50,6 @@ public class ShowJFrame extends javax.swing.JFrame {
      */
     public ShowJFrame() {// 构造方法是不是太重  O(∩_∩)O哈哈~
         initComponents();
-        try {
-        	sumSuccessCount = DaoFactory.getMyDao().getAllCount();
-		} catch (Exception e) {
-		}
         schedule();
     }
 
@@ -76,7 +67,6 @@ public class ShowJFrame extends javax.swing.JFrame {
     	 jLabel_requestShow.setText("抓取请求数："+spider.sum);
          jLabel_successShow.setText("抓取成功数："+spider.success);
          jLabel_failShow.setText("抓取失败数："+spider.fail);
-         jLabel_sumSuccessShow.setText("总计："+(sumSuccessCount+spider.success)+"  ["+(myHistoryCount+spider.success)+"]");
 
          if(this.spider.isRun()){
  			this.jButton_stop.setText("暂停，我要修改设置");
@@ -179,7 +169,6 @@ public class ShowJFrame extends javax.swing.JFrame {
         jLabel_requestShow = new javax.swing.JLabel();
         jLabel_successShow = new javax.swing.JLabel();
         jLabel_failShow = new javax.swing.JLabel();
-        jLabel_sumSuccessShow = new javax.swing.JLabel();
         
         jButton_stop = new javax.swing.JButton();
 
@@ -188,8 +177,6 @@ public class ShowJFrame extends javax.swing.JFrame {
         jLabel_requestShow.setText("抓取请求数：0");
         jLabel_successShow.setText("抓取成功数：0");
         jLabel_failShow.setText("抓取失败数：0");
-        jLabel_sumSuccessShow.setText("总计："+sumSuccessCount+"  ["+myHistoryCount+"]");
-        
         
         
         
@@ -342,7 +329,6 @@ public class ShowJFrame extends javax.swing.JFrame {
                             	.addComponent(jLabel_requestShow)
                                 .addComponent(jLabel_successShow)
                                 .addComponent(jLabel_failShow)
-                                .addComponent(jLabel_sumSuccessShow)
                             		
                             	.addComponent(jLabel_userAgent)
                                 .addComponent(jLabel_cookie)
@@ -386,10 +372,6 @@ public class ShowJFrame extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel_failShow)
                     )
-                .addGap(21, 21, 21)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel_sumSuccessShow)
-                    ) 
                  
                   /**---------------------------------------------------------------------------*/
                 .addGap(18, 18, 18)
@@ -525,7 +507,6 @@ public class ShowJFrame extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel_requestShow;
     private javax.swing.JLabel jLabel_successShow;
     private javax.swing.JLabel jLabel_failShow;
-    private javax.swing.JLabel jLabel_sumSuccessShow;
     
     
     /**-----------------------------------------------------------------*/

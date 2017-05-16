@@ -19,6 +19,10 @@ public interface MyDao {
 	
 	public List<JSONObject> getList()throws Exception;
 	
+	public List<JSONObject> getListByLimitPage(int currentId)throws Exception;
+	
+	public int update(int id,String contact, String city,String province,String mobilePhone);
+	
 	public int update(int id,String contact,String tel);
 	
 	public int getAllCount();

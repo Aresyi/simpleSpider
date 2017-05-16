@@ -15,6 +15,82 @@ import java.util.Set;
  */
 public class Toolbox {
 	
+	
+	/**
+	 * 判断Email (Email由帐号@域名组成，格式为xxx@xxx.xx)<br>
+	 * 帐号由英文字母、数字、点、减号和下划线组成，<br>
+	 * 只能以英文字母、数字、减号或下划线开头和结束。<br>
+	 * 域名由英文字母、数字、减号、点组成<br>
+	 * www.net.cn的注册规则为：只提供英文字母、数字、减号。减号不能用作开头和结尾。(中文域名使用太少，暂不考虑)<br>
+	 * 实际查询时-12.com已被注册。<br>
+	 * 以下是几大邮箱极限数据测试结果<br>
+	 * 163.com为字母或数字开头和结束。<br>
+	 * hotmail.com为字母开头，字母、数字、减号或下划线结束。<br>
+	 * live.cn为字母、数字、减号或下划线开头和结束。hotmail.com和live.cn不允许有连续的句号。
+	 * 
+	 * @param email
+	 * @return
+	 */
+	public static boolean isEmail(String email) {
+
+		return isEmptyString(email) ? false
+				: PatternKit
+						.regex("^[\\w_-]+([\\.\\w_-]*[\\w_-]+)?@[\\w-]+\\.[a-zA-Z]+(\\.[a-zA-Z]+)?$",
+								email, true);
+	}
+
+	/**
+	 * 从输入字符串中截取EMAIL
+	 * 
+	 * @param input
+	 * @return
+	 */
+	public static String parseEmail(String input) {
+
+		String regex = "[\\s\\p{Punct}]*([\\w_-]+([\\.\\w_-]*[\\w_-]+)?@[\\w-]+\\.[a-zA-Z]+(\\.[a-zA-Z]+)?)[\\s\\p{Punct}]*";
+
+		return PatternKit.parseStr(input, regex, 1);
+	}
+	
+	
+	/**
+	 * 判断是否为手机号
+	 * 
+	 * @param mobile
+	 * @return
+	 */
+	public static boolean isMobile(String mobile) {
+
+		return isEmptyString(mobile) ? false : PatternKit.regex(
+				"^(\\+86(\\s)?)?0?1(3|4|5|7|8)\\d{9}$", mobile, true);
+
+	}
+	
+	
+	/**
+	 * 将带有区号的手机号进行标准格式转化
+	 * 
+	 * @param mobile
+	 * @return
+	 */
+	public static String getPhoneNumber(String phoneNumber, boolean mobileOnly) {
+
+		if (isEmptyString(phoneNumber))
+			return "";
+
+		phoneNumber = phoneNumber.replaceAll("[^\\d]", "");
+		if (phoneNumber.startsWith("86"))
+			phoneNumber = phoneNumber.replaceFirst("86", "");
+
+		String ret = PatternKit.parseStr(phoneNumber.replaceAll("\\s*", ""),
+				"0?(1(3|4|5|8)\\d{9})", 1);
+
+		return isMobile(ret) ? phoneNumber.startsWith("0") ? phoneNumber
+				.replaceFirst("0", "") : phoneNumber : mobileOnly ? "" : ret;
+
+	}
+	
+	
 	/**
 	 * 获取指定范围的随机数
 	 * 
@@ -115,6 +191,41 @@ public class Toolbox {
 		return contactInfo;
 	}
 	
+	/**
+	 * 字符段去重
+	 * 
+	 * @param tel
+	 * @return
+	 *
+	 * @author : Ares.yi
+	 * @createTime : 2017年5月16日 上午10:48:11
+	 */
+	public static Set<String> cleanTelInfo(String tel){
+		Set<String> set = new HashSet<String>();
+
+		if(isEmptyString(tel)){
+			return set;
+		}
+		
+		
+		if(tel.contains(" ")){
+			
+			
+			for(String one : tel.split(" ")){
+				if(isMobile(one)){
+					set.add(one);
+				}
+			}
+			
+		}else{
+			if(isMobile(tel)){
+				set.add(tel);
+			}
+		}
+		
+		return set;
+	}
+	
 	
 	/**
 	 * 将首字母转小写
@@ -199,5 +310,10 @@ public class Toolbox {
 		
 		return "''";
 	}
+
 	
+	public static void main(String[] args) {
+		MyLog.logInfo(isMobile("86"));
+		MyLog.logInfo(cleanTelInfo("86"));
+	}
 }
