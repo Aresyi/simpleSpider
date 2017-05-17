@@ -50,4 +50,11 @@ public interface MyDao {
 	
 	public int updateZero();
 	
+	
+	
+	/***************************************************************************************/
+	public List<JSONObject> getHuiCongDataListByLimitPage(int currentId)throws Exception;
+	public int insertHuiCongData(String chineseName,String company,String companyAddress,String province,String city,String mobilePhone,String otherPhone1st,String otherPhone2nd,String otherPhone3rd,String personIUCode)throws Exception;
+	/***************************************************************************************/
+	
 }

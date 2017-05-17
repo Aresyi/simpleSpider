@@ -252,6 +252,27 @@ public class MyDaoImpl extends MultiDataSourceDaoSupport implements MyDao {
 	public int updateZero() {
 		return this.getJdbcTemplate().update("UPDATE info_1688 SET updateCount=0,updateTime=0 WHERE tel='' AND updateCount>=3 AND isNotMobile=0");
 	}
+
+
+
+	@Override
+	public List<JSONObject> getHuiCongDataListByLimitPage(int currentId)
+			throws Exception {
+		 return this.getJdbcTemplate().query("select * from huicongshop where id > ? ORDER BY id  limit 500",new Object[]{currentId},new JSONPropertyRowMapper());
+	}
+
+
+
+	@Override
+	public int insertHuiCongData(String chineseName, String company,
+			String companyAddress, String province, String city,
+			String mobilePhone, String otherPhone1st, String otherPhone2nd,
+			String otherPhone3rd, String personIUCode) throws Exception {
+		this.getJdbcTemplate()
+        .update("INSERT INTO user_data_temp(typeOf,chineseName, company, companyAddress, province, city, mobilePhone, otherPhone1st, otherPhone2nd, otherPhone3rd, personIUCode) VALUES(?,?,?,?,?,?,?,?,?,?,?)",
+            new Object[] {4,chineseName, company, companyAddress, province, city, mobilePhone, otherPhone1st, otherPhone2nd, otherPhone3rd, personIUCode});
+		return 0;
+	}
 	
 	
 	
